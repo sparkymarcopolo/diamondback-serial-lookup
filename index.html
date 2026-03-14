@@ -1,0 +1,174 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2685.4">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+  </style>
+</head>
+<body>
+<p class="p1">&lt;!DOCTYPE html&gt;</p>
+<p class="p1">&lt;html&gt;</p>
+<p class="p1">&lt;head&gt;</p>
+<p class="p1">&lt;meta charset="UTF-8"&gt;</p>
+<p class="p1">&lt;title&gt;DiamondBack Serial Lookup&lt;/title&gt;</p>
+<p class="p1">&lt;style&gt;</p>
+<p class="p1">body{</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-family: Arial, sans-serif;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>text-align: center;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>padding: 20px;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">input{</p>
+<p class="p1"><span class="Apple-converted-space">  </span>padding: 10px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-size: 16px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>width: 220px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>text-transform: uppercase;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">button{</p>
+<p class="p1"><span class="Apple-converted-space">  </span>padding: 10px 15px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>margin-left: 5px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-size: 16px;</p>
+<p class="p1">}</p>
+<p class="p2"><br></p>
+<p class="p1">#result{</p>
+<p class="p1"><span class="Apple-converted-space">  </span>margin-top: 20px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-size: 18px;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>font-weight: bold;</p>
+<p class="p1">}</p>
+<p class="p1">&lt;/style&gt;</p>
+<p class="p1">&lt;/head&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;body&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;h2&gt;DiamondBack Serial Number Lookup&lt;/h2&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;input id="serial" placeholder="Enter Serial Number"&gt;</p>
+<p class="p1">&lt;button onclick="decode()"&gt;Lookup&lt;/button&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;div id="result"&gt;&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;script&gt;</p>
+<p class="p1">function decode(){</p>
+<p class="p1"><span class="Apple-converted-space">  </span>let serial = document.getElementById("serial").value.toUpperCase();</p>
+<p class="p1"><span class="Apple-converted-space">  </span>let result = document.getElementById("result");</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>// -------------------</p>
+<p class="p1"><span class="Apple-converted-space">  </span>// JERE FORMAT</p>
+<p class="p1"><span class="Apple-converted-space">  </span>// -------------------</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if(/^\d{3}[WJ][A-L][GHI]$/.test(serial)){</p>
+<p class="p1"><span class="Apple-converted-space">    </span>let build = serial.substring(0,3);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>let monthCode = serial.charAt(4);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>let yearCode = serial.charAt(5);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>let months = {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>A:"January",B:"February",C:"March",D:"April",</p>
+<p class="p1"><span class="Apple-converted-space">      </span>E:"May",F:"June",G:"July",H:"August",</p>
+<p class="p1"><span class="Apple-converted-space">      </span>I:"September",J:"October",K:"November",L:"December"</p>
+<p class="p1"><span class="Apple-converted-space">    </span>};</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>let years = {G:"1977",H:"1978",I:"1979"};</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>result.innerHTML =</p>
+<p class="p1"><span class="Apple-converted-space">      </span>"Manufacturer: Jere&lt;br&gt;" +</p>
+<p class="p1"><span class="Apple-converted-space">      </span>"Year: "+years[yearCode]+"&lt;br&gt;" +</p>
+<p class="p1"><span class="Apple-converted-space">      </span>"Month: "+months[monthCode]+"&lt;br&gt;" +</p>
+<p class="p1"><span class="Apple-converted-space">      </span>"Production Number: "+build+"&lt;br&gt;" +</p>
+<p class="p1"><span class="Apple-converted-space">      </span>"Serial Format: Jere Fabrication (1977–1979)";</p>
+<p class="p1"><span class="Apple-converted-space">    </span>return;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>// -------------------</p>
+<p class="p1"><span class="Apple-converted-space">  </span>// KOIZUMI VM FORMAT</p>
+<p class="p1"><span class="Apple-converted-space">  </span>// -------------------</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if(/^VM\d{1,4}$/.test(serial)){</p>
+<p class="p1"><span class="Apple-converted-space">    </span>let build = serial.substring(2);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>result.innerHTML =</p>
+<p class="p1"><span class="Apple-converted-space">      </span>"Manufacturer: Koizumi&lt;br&gt;" +</p>
+<p class="p1"><span class="Apple-converted-space">      </span>"Year: 1979&lt;br&gt;" +</p>
+<p class="p1"><span class="Apple-converted-space">      </span>"Production Period: March–June&lt;br&gt;" +</p>
+<p class="p1"><span class="Apple-converted-space">      </span>"Production Number: "+build+"&lt;br&gt;" +</p>
+<p class="p1"><span class="Apple-converted-space">      </span>"Serial Format: Koizumi VM Series";</p>
+<p class="p1"><span class="Apple-converted-space">    </span>return;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>// -------------------</p>
+<p class="p1"><span class="Apple-converted-space">  </span>// KOIZUMI DATE FORMAT</p>
+<p class="p1"><span class="Apple-converted-space">  </span>// -------------------</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if(/^[901234][A-Z]\d{4}[A-Z]?$/.test(serial)){</p>
+<p class="p1"><span class="Apple-converted-space">    </span>let yearCode = serial.charAt(0);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>let monthCode = serial.charAt(1);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>let build = serial.substring(2,6);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>let years = {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>9:"1979",0:"1980",1:"1981",</p>
+<p class="p1"><span class="Apple-converted-space">      </span>2:"1982",3:"1983",4:"1984"</p>
+<p class="p1"><span class="Apple-converted-space">    </span>};</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>let months = {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>A:"January",B:"February",C:"March",D:"April",</p>
+<p class="p1"><span class="Apple-converted-space">      </span>E:"May",F:"June",G:"July",H:"August",</p>
+<p class="p1"><span class="Apple-converted-space">      </span>X:"September",J:"October",K:"November",L:"December"</p>
+<p class="p1"><span class="Apple-converted-space">    </span>};</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>result.innerHTML =</p>
+<p class="p1"><span class="Apple-converted-space">      </span>"Manufacturer: Koizumi&lt;br&gt;" +</p>
+<p class="p1"><span class="Apple-converted-space">      </span>"Year: "+years[yearCode]+"&lt;br&gt;" +</p>
+<p class="p1"><span class="Apple-converted-space">      </span>"Month: "+months[monthCode]+"&lt;br&gt;" +</p>
+<p class="p1"><span class="Apple-converted-space">      </span>"Production Number: "+build+"&lt;br&gt;" +</p>
+<p class="p1"><span class="Apple-converted-space">      </span>"Serial Format: Koizumi Date Code";</p>
+<p class="p1"><span class="Apple-converted-space">    </span>return;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>// -------------------</p>
+<p class="p1"><span class="Apple-converted-space">  </span>// FAIRLY FORMAT (updated with C for 1980)</p>
+<p class="p1"><span class="Apple-converted-space">  </span>// -------------------</p>
+<p class="p1"><span class="Apple-converted-space">  </span>if(/^F[0-5C]\d{2}\d{4}$/.test(serial)){</p>
+<p class="p1"><span class="Apple-converted-space">    </span>let yearCode = serial.charAt(1);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>let month = serial.substring(2,4);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>let build = serial.substring(4);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>// convert backwards C to 0</p>
+<p class="p1"><span class="Apple-converted-space">    </span>if(yearCode === "C"){</p>
+<p class="p1"><span class="Apple-converted-space">      </span>yearCode = "0";</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>let years = {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>0:"1980",1:"1981",2:"1982",</p>
+<p class="p1"><span class="Apple-converted-space">      </span>3:"1983",4:"1984",5:"1985"</p>
+<p class="p1"><span class="Apple-converted-space">    </span>};</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>let monthNames = {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>"01":"January","02":"February","03":"March",</p>
+<p class="p1"><span class="Apple-converted-space">      </span>"04":"April","05":"May","06":"June",</p>
+<p class="p1"><span class="Apple-converted-space">      </span>"07":"July","08":"August","09":"September",</p>
+<p class="p1"><span class="Apple-converted-space">      </span>"10":"October","11":"November","12":"December"</p>
+<p class="p1"><span class="Apple-converted-space">    </span>};</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>result.innerHTML =</p>
+<p class="p1"><span class="Apple-converted-space">      </span>"Manufacturer: Fairly&lt;br&gt;" +</p>
+<p class="p1"><span class="Apple-converted-space">      </span>"Year: "+years[yearCode]+"&lt;br&gt;" +</p>
+<p class="p1"><span class="Apple-converted-space">      </span>"Month: "+monthNames[month]+"&lt;br&gt;" +</p>
+<p class="p1"><span class="Apple-converted-space">      </span>"Production Number: "+build+"&lt;br&gt;" +</p>
+<p class="p1"><span class="Apple-converted-space">      </span>"Serial Format: Fairly Date Code (1980–1985)";</p>
+<p class="p1"><span class="Apple-converted-space">    </span>return;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>// -------------------</p>
+<p class="p1"><span class="Apple-converted-space">  </span>// Not recognized</p>
+<p class="p1"><span class="Apple-converted-space">  </span>// -------------------</p>
+<p class="p1"><span class="Apple-converted-space">  </span>result.innerHTML = "Serial number not recognised.";</p>
+<p class="p1">}</p>
+<p class="p1">&lt;/script&gt;</p>
+<p class="p2"><br></p>
+<p class="p1">&lt;/body&gt;</p>
+<p class="p1">&lt;/html&gt;</p>
+</body>
+</html>

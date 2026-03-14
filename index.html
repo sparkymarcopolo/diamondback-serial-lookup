@@ -130,7 +130,7 @@ function decode(){
       `<strong>Year:</strong> ${years[yearCode]}<br>` +
       `<strong>Month:</strong> ${months[monthCode]}<br>` +
       `<strong>Production Number:</strong> ${build}<br>` +
-      `<strong>Serial Format:</strong> Jere Fabrication (1977–1979)`;
+      `<strong>Serial Format:</strong> Jere Fabrications`;
     return;
   }
 
@@ -145,12 +145,12 @@ function decode(){
       `<strong>Year:</strong> 1979<br>` +
       `<strong>Production Period:</strong> March–June<br>` +
       `<strong>Production Number:</strong> ${build}<br>` +
-      `<strong>Serial Format:</strong> Koizumi VM Series`;
+      `<strong>Serial Format:</strong> Koizumi`;
     return;
   }
 
   // -------------------
-  // KOIZUMI DATE FORMAT
+  // KOIZUMI KANJI FORMAT
   // -------------------
   if(/^[901234][A-Z]\d{4}[A-Z]?$/.test(serial)){
     let yearCode = serial.charAt(0);
@@ -166,7 +166,7 @@ function decode(){
       `<strong>Year:</strong> ${years[yearCode]}<br>` +
       `<strong>Month:</strong> ${months[monthCode]}<br>` +
       `<strong>Production Number:</strong> ${build}<br>` +
-      `<strong>Serial Format:</strong> Koizumi Date Code`;
+      `<strong>Serial Format:</strong> Koizumi`;
     return;
   }
 
@@ -190,7 +190,7 @@ function decode(){
       `<strong>Year:</strong> ${years[yearCode]}<br>` +
       `<strong>Month:</strong> ${monthNames[month]}<br>` +
       `<strong>Production Number:</strong> ${build}<br>` +
-      `<strong>Serial Format:</strong> Fairly Date Code (1980–1985)`;
+      `<strong>Serial Format:</strong> Fairly Bike Co`;
     return;
   }
 

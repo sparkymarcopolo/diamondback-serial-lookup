@@ -122,9 +122,9 @@ LLL###
 
 if(/^[WJ][A-L][GHI]\d{3}$/.test(serial)){
 
-let monthCode=serial.charAt(1);
-let yearCode=serial.charAt(2);
-let build=serial.substring(3,6);
+let monthCode = serial.charAt(1);
+let yearCode = serial.charAt(2);
+let build = serial.substring(3,6);
 
 let months={
 A:"January",
@@ -147,7 +147,7 @@ H:"1978",
 I:"1979"
 };
 
-let year=years[yearCode];
+let year = years[yearCode];
 
 let model="MX";
 let generation="";
@@ -169,7 +169,7 @@ notes="First Diamond Back BMX model";
 
 }
 
-if(year==="1978" || year==="1979"){
+if(year==="1978"){
 
 generation="2nd Generation MX";
 
@@ -179,9 +179,21 @@ productionWindow="January 1978 – February 1979";
 
 }
 
+if(year==="1979"){
+
+generation="2nd Generation MX";
+
+characteristics="US Bottom Bracket Shell, Looptail, Large Diamond Gusset";
+
+productionWindow="January 1978 – February 1979";
+
+notes="Final Jere fabrication period. This marked the end of Jere manufacturing for Diamond Back and the final use of the MX model name.";
+
+}
+
 /* OUTPUT */
 
-result.innerHTML=
+result.innerHTML =
 `<div class="result-title">Serial Number Details</div>
 <strong>Manufacturer:</strong> Jere<br>
 <strong>Year:</strong> ${year}<br>

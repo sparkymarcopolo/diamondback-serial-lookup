@@ -295,9 +295,9 @@ if(/^\d[A-Z]\d{3,4}[A-Z]?$/.test(serial)){
 
     // Initialize fields
     let manufacturer = "Koizumi";
-    let model = "";           // blank unless yearCode = 9
-    let generation = "";      // blank unless yearCode = 9
-    let productionWindow = ""; // blank unless yearCode = 9
+    let model = "";
+    let generation = "";
+    let productionWindow = "";
 
     // Only serials starting with 9 are Pro / Large Pro
     if(yearCode === "9"){
@@ -306,10 +306,10 @@ if(/^\d[A-Z]\d{3,4}[A-Z]?$/.test(serial)){
         productionWindow = "June 1979 – April 1981";
     }
 
-    let frameMaterial = "Chromoly";
-    let bottomBracket = "US Bottom Bracket Shell";
-    let characteristics = "Early versions fabricated with Chromoly 2mm rear dropouts and Chromoly Dual Dropout Forks";
-    let notes = ""; // left blank for now
+    let frameMaterial = "";      // left blank for now
+    let bottomBracket = "";      // left blank for now
+    let characteristics = "";    // left blank for now
+    let notes = "";              // left blank for now
 
     // Output table
     result.innerHTML =

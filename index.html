@@ -147,13 +147,53 @@ H:"1978",
 I:"1979"
 };
 
+let year=years[yearCode];
+
+let model="MX";
+let generation="";
+let characteristics="";
+let productionWindow="";
+let notes="";
+
+/* MODEL LOGIC */
+
+if(year==="1977"){
+
+generation="1st Generation MX";
+
+characteristics="Euro Bottom Bracket Shell, Looptail, Large Diamond Gusset";
+
+productionWindow="November – December 1977";
+
+notes="First Diamond Back BMX model";
+
+}
+
+if(year==="1978" || year==="1979"){
+
+generation="2nd Generation MX";
+
+characteristics="US Bottom Bracket Shell, Looptail, Large Diamond Gusset";
+
+productionWindow="January 1978 – February 1979";
+
+}
+
+/* OUTPUT */
+
 result.innerHTML=
 `<div class="result-title">Serial Number Details</div>
-<strong>Manufacturer:</strong> Jere Fabrications<br>
-<strong>Year:</strong> ${years[yearCode]}<br>
+<strong>Manufacturer:</strong> Jere<br>
+<strong>Year:</strong> ${year}<br>
 <strong>Month:</strong> ${months[monthCode]}<br>
 <strong>Production Number:</strong> ${build}<br>
-<strong>Serial Format:</strong> Jere Fabrications`;
+<strong>Model:</strong> ${model}<br>
+<strong>Generation:</strong> ${generation}<br>
+<strong>Production Window:</strong> ${productionWindow}<br>
+<strong>Characteristics:</strong> ${characteristics}<br>
+<strong>MX Production Era:</strong> 1977 – 1979<br>
+<strong>Notes:</strong> ${notes}<br>
+<strong>Serial Format:</strong> Jere Fabrication (1977–1979)`;
 
 return;
 

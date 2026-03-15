@@ -259,46 +259,59 @@ if(/^VM\d{3,5}$/.test(serial)){
 }
 
 /* -----------------
-KOIZUMI KANJI FORMAT (#L####[#])
+KOIZUMI KANJI FORMAT
 -----------------*/
 if(/^\d[A-Z]\d{3,4}[A-Z]?$/.test(serial)){
-let yearCode = serial.charAt(0);
-let monthCode = serial.charAt(1);
-let build = serial.substring(2,6);
-let manStamp = serial.length>6 ? serial.charAt(6) : "";
+    // Clean input
+    serial = serial.toUpperCase().replace(/\s+/g,'');
 
-let koizumiYears={"9":"1979","0":"1980","1":"1981","2":"1982","3":"1983","4":"1984"};
-let koizumiMonths={A:"January",B:"February",C:"March",D:"April",E:"May",F:"June",
-G:"July",H:"August",I:"September",X:"September",J:"October",K:"November",L:"December"};
+    let yearCode = serial.charAt(0);
+    let monthCode = serial.charAt(1);
+    let build = serial.substring(2, serial.length - 1);
+    let manStamp = serial.length > (build.length + 2) ? serial.charAt(serial.length - 1) : "";
 
-let year=koizumiYears[yearCode];
-let month=koizumiMonths[monthCode];
+    // Year mapping
+    const koizumiYears = {
+        "9":"1979","0":"1980","1":"1981","2":"1982",
+        "3":"1983","4":"1984"
+    };
+    let year = koizumiYears[yearCode] || "Unknown";
 
-let manufacturer="Koizumi";
-let model="???"; // provide later
-let generation="???"; // provide later
-let productionWindow="???"; // provide later
-let frameMaterial="???"; // provide later
-let bottomBracket="???"; // provide later
-let characteristics="???"; // provide later
-let notes=""; // provide later
+    // Month mapping
+    const koizumiMonths = {
+        A:"January",B:"February",C:"March",D:"April",E:"May",F:"June",
+        G:"July",H:"August",I:"September",X:"September",J:"October",
+        K:"November",L:"December"
+    };
+    let month = koizumiMonths[monthCode] || "Unknown";
 
-result.innerHTML =
-`<div class="result-title">Serial Number Details</div>
-<table class="result-table">
-<tr><td>Manufacturer:</td><td>${manufacturer}</td></tr>
-<tr><td>Year:</td><td>${year}</td></tr>
-<tr><td>Month:</td><td>${month}</td></tr>
-<tr><td>Build Number:</td><td>${build}</td></tr>
-<tr><td>Model:</td><td>${model}</td></tr>
-<tr><td>Generation:</td><td>${generation}</td></tr>
-<tr><td>Production Window:</td><td>${productionWindow}</td></tr>
-<tr><td>Frame Material:</td><td>${frameMaterial}</td></tr>
-<tr><td>Bottom Bracket:</td><td>${bottomBracket}</td></tr>
-<tr><td>Characteristics:</td><td>${characteristics}</td></tr>
-<tr><td>Notes:</td><td>${notes}</td></tr>
-</table>`;
-return;
+    // Frame details (update as needed)
+    let manufacturer = "Koizumi";
+    let model = "Pro / Large Pro";           // example
+    let generation = "1st Generation Pro";   // example
+    let productionWindow = "March – June 1979"; 
+    let frameMaterial = "Chromoly";
+    let bottomBracket = "US Bottom Bracket Shell";
+    let characteristics = "Early versions fabricated with Chromoly 2mm rear dropouts and Chromoly Dual Dropout Forks";
+    let notes = manStamp ? "Manufacturer stamp: " + manStamp : "";
+
+    // Output table (matches MX, VM, Fairly style)
+    result.innerHTML =
+    `<div class="result-title">Serial Number Details</div>
+    <table class="result-table">
+    <tr><td>Manufacturer:</td><td>${manufacturer}</td></tr>
+    <tr><td>Year:</td><td>${year}</td></tr>
+    <tr><td>Month:</td><td>${month}</td></tr>
+    <tr><td>Build Number:</td><td>${build}</td></tr>
+    <tr><td>Model:</td><td>${model}</td></tr>
+    <tr><td>Generation:</td><td>${generation}</td></tr>
+    <tr><td>Production Window:</td><td>${productionWindow}</td></tr>
+    <tr><td>Frame Material:</td><td>${frameMaterial}</td></tr>
+    <tr><td>Bottom Bracket:</td><td>${bottomBracket}</td></tr>
+    <tr><td>Characteristics:</td><td>${characteristics}</td></tr>
+    <tr><td>Notes:</td><td>${notes}</td></tr>
+    </table>`;
+    return;
 }
 
 /* -----------------

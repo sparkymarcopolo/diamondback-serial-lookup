@@ -285,17 +285,24 @@ if(/^\d[A-Z]\d{3,4}[A-Z]?$/.test(serial)){
     };
     let month = koizumiMonths[monthCode] || "Unknown";
 
-    // Frame details (update as needed)
+    // Model / Generation / Production window logic
     let manufacturer = "Koizumi";
-    let model = "Pro / Large Pro";           // example
-    let generation = "1st Generation Pro";   // example
-    let productionWindow = "March – June 1979"; 
+    let model = "Pro"; // default
+    let generation = "1st Generation Pro"; // default
+    let productionWindow = "March – June 1979"; // default
+    
+    // Special rule for serials starting with 9
+    if(yearCode === "9"){
+        generation = "2nd Generation Pro (Large Pro)";
+        productionWindow = "June 1979 – April 1981";
+    }
+
     let frameMaterial = "Chromoly";
     let bottomBracket = "US Bottom Bracket Shell";
     let characteristics = "Early versions fabricated with Chromoly 2mm rear dropouts and Chromoly Dual Dropout Forks";
     let notes = manStamp ? "Manufacturer stamp: " + manStamp : "";
 
-    // Output table (matches MX, VM, Fairly style)
+    // Output table
     result.innerHTML =
     `<div class="result-title">Serial Number Details</div>
     <table class="result-table">

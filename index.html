@@ -237,43 +237,47 @@ return;
 /* -----------------
 FAIRLY FORMAT
 -----------------*/
-let fairSerial = serial.replace(/^F(C|\d)/,function(m,p1){return "F"+(p1==="C"?"0":p1);});
+let fairSerial = serial.toUpperCase();
 
-if(/^F\d\d\d{4}$/.test(fairSerial)){
-let yearCode = fairSerial.charAt(1);
-let monthCode = fairSerial.substring(2,4);
-let build = fairSerial.substring(4,8);
+// Replace back-to-front "C" with "0" in first digit if present
+if(/^F[C0-5]\d{5}$/.test(fairSerial)){
+    let firstDigit = fairSerial.charAt(1) === "C" ? "0" : fairSerial.charAt(1);
+    let yearCode = firstDigit;
+    let monthCode = fairSerial.substring(2,4);
+    let build = fairSerial.substring(4,8);
 
-let fairYears={"0":"1980","1":"1981","2":"1982","3":"1983","4":"1984","5":"1985"};
-let year=fairYears[yearCode];
-let month=parseInt(monthCode,10);
-let monthName=month>=1 && month<=12 ? new Date(2000,month-1,1).toLocaleString('default',{month:'long'}) : "Unknown";
+    let fairYears={"0":"1980","1":"1981","2":"1982","3":"1983","4":"1984","5":"1985"};
+    let year=fairYears[yearCode];
+    let monthNum=parseInt(monthCode,10);
+    let monthName = (monthNum>=1 && monthNum<=12) ? 
+        new Date(2000,monthNum-1,1).toLocaleString('default',{month:'long'}) 
+        : "Unknown";
 
-let manufacturer="Fairly";
-let model="???"; // provide later
-let generation="???"; // provide later
-let productionWindow="???"; // provide later
-let frameMaterial="???"; // provide later
-let bottomBracket="???"; // provide later
-let characteristics="???"; // provide later
-let notes=""; // provide later
+    let manufacturer="Fairly";
+    let model="???"; // provide later
+    let generation="???"; // provide later
+    let productionWindow="???"; // provide later
+    let frameMaterial="???"; // provide later
+    let bottomBracket="???"; // provide later
+    let characteristics="???"; // provide later
+    let notes="";
 
-result.innerHTML =
-`<div class="result-title">Serial Number Details</div>
-<table class="result-table">
-<tr><td>Manufacturer:</td><td>${manufacturer}</td></tr>
-<tr><td>Year:</td><td>${year}</td></tr>
-<tr><td>Month:</td><td>${monthName}</td></tr>
-<tr><td>Build Number:</td><td>${build}</td></tr>
-<tr><td>Model:</td><td>${model}</td></tr>
-<tr><td>Generation:</td><td>${generation}</td></tr>
-<tr><td>Production Window:</td><td>${productionWindow}</td></tr>
-<tr><td>Frame Material:</td><td>${frameMaterial}</td></tr>
-<tr><td>Bottom Bracket:</td><td>${bottomBracket}</td></tr>
-<tr><td>Characteristics:</td><td>${characteristics}</td></tr>
-<tr><td>Notes:</td><td>${notes}</td></tr>
-</table>`;
-return;
+    result.innerHTML =
+    `<div class="result-title">Serial Number Details</div>
+    <table class="result-table">
+    <tr><td>Manufacturer:</td><td>${manufacturer}</td></tr>
+    <tr><td>Year:</td><td>${year}</td></tr>
+    <tr><td>Month:</td><td>${monthName}</td></tr>
+    <tr><td>Build Number:</td><td>${build}</td></tr>
+    <tr><td>Model:</td><td>${model}</td></tr>
+    <tr><td>Generation:</td><td>${generation}</td></tr>
+    <tr><td>Production Window:</td><td>${productionWindow}</td></tr>
+    <tr><td>Frame Material:</td><td>${frameMaterial}</td></tr>
+    <tr><td>Bottom Bracket:</td><td>${bottomBracket}</td></tr>
+    <tr><td>Characteristics:</td><td>${characteristics}</td></tr>
+    <tr><td>Notes:</td><td>${notes}</td></tr>
+    </table>`;
+    return;
 }
 
 /* -----------------

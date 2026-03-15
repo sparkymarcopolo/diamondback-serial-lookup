@@ -61,6 +61,14 @@ input[type="text"]{
   border:1px solid #ccc;
 }
 
+select{
+  width:100%;
+  padding:8px;
+  margin-top:5px;
+  margin-bottom:10px;
+  font-size:14px;
+}
+
 button{
   padding:10px 20px;
   font-size:16px;
@@ -137,6 +145,44 @@ production date and model details.
 </div>
 
 <input type="text" id="serialInput" placeholder="Enter Serial Number">
+
+<!-- Kanji selectors -->
+<div style="margin-top:20px;text-align:left;">
+  <label for="tailSelect"><strong>Frame Tail Type (optional)</strong></label><br>
+  <select id="tailSelect">
+    <option value="">Unknown</option>
+    <option value="looptail">Looptail</option>
+    <option value="non-looptail">Non-Looptail</option>
+  </select>
+</div>
+
+<div style="text-align:left;">
+  <label for="bbSelect"><strong>Bottom Bracket Type (optional)</strong></label><br>
+  <select id="bbSelect">
+    <option value="">Unknown</option>
+    <option value="US">US</option>
+    <option value="Euro">Euro</option>
+  </select>
+</div>
+
+<div style="text-align:left;">
+  <label for="dropoutSelect"><strong>Rear Dropout Thickness (optional)</strong></label><br>
+  <select id="dropoutSelect">
+    <option value="">Unknown</option>
+    <option value="2mm">2mm</option>
+    <option value="3mm">3mm</option>
+  </select>
+</div>
+
+<div style="text-align:left;">
+  <label for="seatTubeSelect"><strong>Seat Tube Angle (optional)</strong></label><br>
+  <select id="seatTubeSelect">
+    <option value="">Unknown</option>
+    <option value="laidback">Laid Back</option>
+    <option value="nearvertical">Near Vertical</option>
+  </select>
+</div>
+
 <button onclick="lookupSerial()">Lookup</button>
 
 <div id="result"></div>
@@ -144,15 +190,18 @@ production date and model details.
 </div>
 
 <script>
-
 function lookupSerial(){
 
 let serial=document.getElementById("serialInput").value;
 
 /* AUTO CLEAN USER INPUT */
-
 serial = serial.toUpperCase();
 serial = serial.replace(/\s+/g,'');
+
+let tail = document.getElementById("tailSelect").value;
+let bb = document.getElementById("bbSelect").value;
+let dropout = document.getElementById("dropoutSelect").value;
+let seatTube = document.getElementById("seatTubeSelect").value;
 
 let result=document.getElementById("result");
 result.innerHTML="";
@@ -161,218 +210,278 @@ result.innerHTML="";
 JERE FORMAT LLL###
 ------------------*/
 if(/^[WJ][A-L][GHI]\d{3}$/.test(serial)){
-let monthCode = serial.charAt(1);
-let yearCode = serial.charAt(2);
-let build = serial.substring(3,6);
+  let monthCode = serial.charAt(1);
+  let yearCode = serial.charAt(2);
+  let build = serial.substring(3,6);
 
-let months={
-A:"January",B:"February",C:"March",D:"April",E:"May",F:"June",
-G:"July",H:"August",I:"September",J:"October",K:"November",L:"December"
-};
+  let months={
+    A:"January",B:"February",C:"March",D:"April",E:"May",F:"June",
+    G:"July",H:"August",I:"September",J:"October",K:"November",L:"December"
+  };
 
-let years={
-G:"1977",
-H:"1978",
-I:"1979"
-};
+  let years={
+    G:"1977",
+    H:"1978",
+    I:"1979"
+  };
 
-let year = years[yearCode];
-let model="MX";
-let generation="";
-let productionWindow="";
-let frameMaterial="Chromoly";
-let bottomBracket="";
-let characteristics="Looptail, Large Diamond Gusset";
-let notes="";
+  let year = years[yearCode];
+  let model="MX";
+  let generation="";
+  let productionWindow="";
+  let frameMaterial="Chromoly";
+  let bottomBracket="";
+  let characteristics="Looptail, Large Diamond Gusset";
+  let notes="";
 
-/* MODEL LOGIC */
-if(year==="1977"){
-  generation="1st Generation MX";
-  bottomBracket="Euro Bottom Bracket Shell";
-  productionWindow="September – December 1977"; // updated
-  notes="First Diamond Back BMX model";
-}
-if(year==="1978"){
-  generation="2nd Generation MX";
-  bottomBracket="US Bottom Bracket Shell";
-  productionWindow="January 1978 – February 1979";
-}
-if(year==="1979"){
-  generation="2nd Generation MX";
-  bottomBracket="US Bottom Bracket Shell";
-  productionWindow="January 1978 – February 1979";
-  notes="Final Jere fabrication period. This marked the end of Jere manufacturing for Diamond Back and the final use of the MX model name.";
-}
+  /* MODEL LOGIC */
+  if(year==="1977"){
+    generation="1st Generation MX";
+    bottomBracket="Euro Bottom Bracket Shell";
+    productionWindow="September – December 1977";
+    notes="First Diamond Back BMX model";
+  }
+  if(year==="1978"){
+    generation="2nd Generation MX";
+    bottomBracket="US Bottom Bracket Shell";
+    productionWindow="January 1978 – February 1979";
+  }
+  if(year==="1979"){
+    generation="2nd Generation MX";
+    bottomBracket="US Bottom Bracket Shell";
+    productionWindow="January 1978 – February 1979";
+    notes="Final Jere fabrication period. This marked the end of Jere manufacturing for Diamond Back and the final use of the MX model name.";
+  }
 
-/* OUTPUT TABLE */
-result.innerHTML =
-`<div class="result-title">Serial Number Details</div>
-<table class="result-table">
-<tr><td>Manufacturer:</td><td>Jere</td></tr>
-<tr><td>Year:</td><td>${year}</td></tr>
-<tr><td>Month:</td><td>${months[monthCode]}</td></tr>
-<tr><td>Production Number:</td><td>${build}</td></tr>
-<tr><td>Model:</td><td>${model}</td></tr>
-<tr><td>Generation:</td><td>${generation}</td></tr>
-<tr><td>MX Production Era:</td><td>1977 – 1979</td></tr>
-<tr><td>Production Window:</td><td>${productionWindow}</td></tr>
-<tr><td>Frame Material:</td><td>${frameMaterial}</td></tr>
-<tr><td>Bottom Bracket:</td><td>${bottomBracket}</td></tr>
-<tr><td>Characteristics:</td><td>${characteristics}</td></tr>
-<tr><td>Notes:</td><td>${notes}</td></tr>
-</table>`;
-return;
+  /* OUTPUT TABLE */
+  result.innerHTML =
+  `<div class="result-title">Serial Number Details</div>
+  <table class="result-table">
+  <tr><td>Manufacturer:</td><td>Jere</td></tr>
+  <tr><td>Year:</td><td>${year}</td></tr>
+  <tr><td>Month:</td><td>${months[monthCode]}</td></tr>
+  <tr><td>Production Number:</td><td>${build}</td></tr>
+  <tr><td>Model:</td><td>${model}</td></tr>
+  <tr><td>Generation:</td><td>${generation}</td></tr>
+  <tr><td>MX Production Era:</td><td>1977 – 1979</td></tr>
+  <tr><td>Production Window:</td><td>${productionWindow}</td></tr>
+  <tr><td>Frame Material:</td><td>${frameMaterial}</td></tr>
+  <tr><td>Bottom Bracket:</td><td>${bottomBracket}</td></tr>
+  <tr><td>Characteristics:</td><td>${characteristics}</td></tr>
+  <tr><td>Notes:</td><td>${notes}</td></tr>
+  </table>`;
+  return;
 }
 
 /* -----------------
 KOIZUMI VM FORMAT
 -----------------*/
 if(/^VM\d{3,5}$/.test(serial)){
-    let build = serial.substring(2);
-    let manufacturer="Koizumi";
-    let year="1979";
-    let month="March – June";
-    let model="Pro (Large Pro)";
-    let generation="1st Generation Pro";
-    let productionWindow="March – June 1979";
-    let frameMaterial="Chromoly";
-    let bottomBracket="US Bottom Bracket Shell";
-    let characteristics="Early versions fabricated with Chromoly 2mm rear dropouts and Chromoly Dual Dropout Forks";
-    let notes="";
+  let build = serial.substring(2);
+  let manufacturer="Koizumi";
+  let year="1979";
+  let month="March – June";
+  let model="Pro (Large Pro)";
+  let generation="1st Generation Pro";
+  let productionWindow="March – June 1979";
+  let frameMaterial="Chromoly";
+  let bottomBracket="US Bottom Bracket Shell";
+  let characteristics="Early versions fabricated with Chromoly 2mm rear dropouts and Chromoly Dual Dropout Forks";
+  let notes="";
 
-    result.innerHTML =
-    `<div class="result-title">Serial Number Details</div>
-    <table class="result-table">
-    <tr><td>Manufacturer:</td><td>${manufacturer}</td></tr>
-    <tr><td>Year:</td><td>${year}</td></tr>
-    <tr><td>Month:</td><td>${month}</td></tr>
-    <tr><td>Build Number:</td><td>${build}</td></tr>
-    <tr><td>Model:</td><td>${model}</td></tr>
-    <tr><td>Generation:</td><td>${generation}</td></tr>
-    <tr><td>Production Window:</td><td>${productionWindow}</td></tr>
-    <tr><td>Frame Material:</td><td>${frameMaterial}</td></tr>
-    <tr><td>Bottom Bracket:</td><td>${bottomBracket}</td></tr>
-    <tr><td>Characteristics:</td><td>${characteristics}</td></tr>
-    <tr><td>Notes:</td><td>${notes}</td></tr>
-    </table>`;
-    return;
+  result.innerHTML =
+  `<div class="result-title">Serial Number Details</div>
+  <table class="result-table">
+  <tr><td>Manufacturer:</td><td>${manufacturer}</td></tr>
+  <tr><td>Year:</td><td>${year}</td></tr>
+  <tr><td>Month:</td><td>${month}</td></tr>
+  <tr><td>Build Number:</td><td>${build}</td></tr>
+  <tr><td>Model:</td><td>${model}</td></tr>
+  <tr><td>Generation:</td><td>${generation}</td></tr>
+  <tr><td>Production Window:</td><td>${productionWindow}</td></tr>
+  <tr><td>Frame Material:</td><td>${frameMaterial}</td></tr>
+  <tr><td>Bottom Bracket:</td><td>${bottomBracket}</td></tr>
+  <tr><td>Characteristics:</td><td>${characteristics}</td></tr>
+  <tr><td>Notes:</td><td>${notes}</td></tr>
+  </table>`;
+  return;
 }
 
 /* -----------------
-KOIZUMI KANJI FORMAT
+KOIZUMI KANJI FORMAT (with dropdown selectors)
 -----------------*/
 if(/^\d[A-Z]\d{3,4}[A-Z]?$/.test(serial)){
+  let yearCode = serial.charAt(0);
+  let monthCode = serial.charAt(1);
+  let build = serial.length >= 6 ? serial.substring(2,6) : serial.substring(2);
 
-    // Clean input
-    serial = serial.toUpperCase().replace(/\s+/g,'');
+  const koizumiYears = {"9":"1979","0":"1980","1":"1981","2":"1982","3":"1983","4":"1984"};
+  const koizumiMonths = {A:"Jan", B:"Feb", C:"Mar", D:"Apr", E:"May", F:"Jun",
+                         G:"Jul", H:"Aug", X:"Sep", J:"Oct", K:"Nov", L:"Dec"};
 
-    let yearCode = serial.charAt(0);
-    let monthCode = serial.charAt(1);
-    let build = "";
+  let year = koizumiYears[yearCode] || "Unknown";
+  let month = koizumiMonths[monthCode] || "Unknown";
 
-    // Correctly extract build number
-    if(serial.length === 5){        // e.g., 9A123
-        build = serial.substring(2); // digits 3–5
-    } else if(serial.length === 6){ // e.g., 9A1234 (no stamp)
-        build = serial.substring(2); // digits 3–6
-    } else if(serial.length === 7){ // e.g., 9A1234K (optional stamp ignored)
-        build = serial.substring(2,6); // digits 3–6
-    }
+  let manufacturer="Koizumi";
+  let model="";
+  let generation="";
+  let productionWindow="";
+  let frameMaterial="";
+  let bottomBracket="";
+  let characteristics="";
+  let notes="";
 
-    // Year mapping
-    const koizumiYears = {
-        "9":"1979","0":"1980","1":"1981","2":"1982",
-        "3":"1983","4":"1984"
-    };
-    let year = koizumiYears[yearCode] || "Unknown";
+  // Model Identification
+  if(yearCode==="9"){
+    model="Pro / Large Pro";
+    generation="2nd Generation Pro";
+    productionWindow="June 1979 – April 1981";
+  }
+  else if((yearCode==="0" || yearCode==="1") && tail==="non-looptail"){
+    model="TK";
+    frameMaterial="Trimoly";
+    bottomBracket="US";
+    characteristics="Large Gusset";
+    generation="n/a";
+  }
+  else if(yearCode==="1" && tail==="looptail" && bb==="Euro"){
+    model="Pro Mini";
+    frameMaterial="Chromoly";
+    bottomBracket="Euro";
+    characteristics="2mm rear dropout";
+    generation="n/a";
+  }
+  else if(["1","2","3"].includes(yearCode) && tail==="looptail" && bb==="US" && seatTube==="laidback"){
+    model="Pro Medium";
+    frameMaterial="Chromoly";
+    bottomBracket="US";
+    characteristics="2mm rear dropout";
+    generation="n/a";
+  }
+  else if(["1","2"].includes(yearCode) && tail==="looptail" && bb==="US" && seatTube==="nearvertical" && year >= 1981 && year <= 1982){
+    model="Pro Senior";
+    generation="1st Generation";
+    productionWindow="April 1981 – March 1982";
+    frameMaterial="Chromoly";
+    bottomBracket="US";
+    characteristics="2mm rear dropout";
+  }
+  else if(["2","3"].includes(yearCode) && tail==="looptail" && bb==="US" && seatTube==="nearvertical" && year >= 1982 && year <= 1983){
+    model="Pro Senior";
+    generation="2nd Generation";
+    productionWindow="April 1982 – March 1983";
+    frameMaterial="Chromoly";
+    bottomBracket="US";
+    characteristics="2mm rear dropout leverage update";
+  }
+  else if(["1","2","3"].includes(yearCode) && tail==="looptail" && dropout==="3mm" && frameMaterial.toLowerCase()==="trimoly"){
+    model="Silver Streak";
+    generation="1st Generation";
+    productionWindow="September 1981 – September 1983";
+    frameMaterial="Trimoly";
+    bottomBracket="US";
+    characteristics="3mm rear dropout";
+  }
+  else if(yearCode==="2" && tail==="looptail" && bb==="US" && year==1982){
+    model="Harry Leary Turbo";
+    generation="1st Generation";
+    productionWindow="April 1982 – May 1982";
+    frameMaterial="Chromoly";
+    bottomBracket="US";
+    characteristics="2mm rear dropout";
+  }
+  else if(["2","3"].includes(yearCode) && tail==="looptail" && bb==="US" && (year==1982 || year==1983)){
+    model="Harry Leary Turbo";
+    generation="2nd Generation";
+    productionWindow="April 1982 – September 1983";
+    frameMaterial="Chromoly";
+    bottomBracket="US";
+    characteristics="2mm rear dropout leverage update";
+  }
+  else if(yearCode==="4" && tail==="looptail" && bb==="US" && year==1984){
+    model="Harry Leary Turbo";
+    generation="3rd Generation";
+    productionWindow="April 1984 – September 1984";
+    frameMaterial="Chromoly";
+    bottomBracket="US";
+    characteristics="Small diamond gusset";
+  }
+  else if(yearCode==="3" && tail==="non-looptail" && bb==="Euro"){
+    model="Turbo Lite";
+    frameMaterial="Chromoly";
+    bottomBracket="Euro";
+    characteristics="Small diamond gusset";
+  }
+  else if(["3","4"].includes(yearCode) && tail==="non-looptail" && bb==="US"){
+    model="Formula One";
+    frameMaterial="Chromoly";
+    bottomBracket="US";
+    characteristics="Small diamond gusset";
+  }
+  else{
+    model="Unknown Kanji Model";
+  }
 
-    // Month mapping
-    const koizumiMonths = {
-        A:"Jan", B:"Feb", C:"Mar", D:"Apr", E:"May", F:"Jun",
-        G:"Jul", H:"Aug", X:"Sep", J:"Oct", K:"Nov", L:"Dec"
-    };
-    let month = koizumiMonths[monthCode] || "Unknown";
-
-    // Initialize fields
-    let manufacturer = "Koizumi";
-    let model = "";
-    let generation = "";
-    let productionWindow = "";
-
-    // Only serials starting with 9 are Pro / Large Pro
-    if(yearCode === "9"){
-        model = "Pro / Large Pro"; 
-        generation = "2nd Generation Pro";
-        productionWindow = "June 1979 – April 1981";
-    }
-
-    let frameMaterial = "";      // left blank for now
-    let bottomBracket = "";      // left blank for now
-    let characteristics = "";    // left blank for now
-    let notes = "";              // left blank for now
-
-    // Output table
-    result.innerHTML =
-    `<div class="result-title">Serial Number Details</div>
-    <table class="result-table">
-    <tr><td>Manufacturer:</td><td>${manufacturer}</td></tr>
-    <tr><td>Year:</td><td>${year}</td></tr>
-    <tr><td>Month:</td><td>${month}</td></tr>
-    <tr><td>Build Number:</td><td>${build}</td></tr>
-    <tr><td>Model:</td><td>${model}</td></tr>
-    <tr><td>Generation:</td><td>${generation}</td></tr>
-    <tr><td>Production Window:</td><td>${productionWindow}</td></tr>
-    <tr><td>Frame Material:</td><td>${frameMaterial}</td></tr>
-    <tr><td>Bottom Bracket:</td><td>${bottomBracket}</td></tr>
-    <tr><td>Characteristics:</td><td>${characteristics}</td></tr>
-    <tr><td>Notes:</td><td>${notes}</td></tr>
-    </table>`;
-    return;
+  // Output Kanji Result
+  result.innerHTML =
+  `<div class="result-title">Serial Number Details</div>
+  <table class="result-table">
+  <tr><td>Manufacturer:</td><td>${manufacturer}</td></tr>
+  <tr><td>Year:</td><td>${year}</td></tr>
+  <tr><td>Month:</td><td>${month}</td></tr>
+  <tr><td>Build Number:</td><td>${build}</td></tr>
+  <tr><td>Model:</td><td>${model}</td></tr>
+  <tr><td>Generation:</td><td>${generation}</td></tr>
+  <tr><td>Production Window:</td><td>${productionWindow}</td></tr>
+  <tr><td>Frame Material:</td><td>${frameMaterial}</td></tr>
+  <tr><td>Bottom Bracket:</td><td>${bottomBracket}</td></tr>
+  <tr><td>Characteristics:</td><td>${characteristics}</td></tr>
+  <tr><td>Notes:</td><td>${notes}</td></tr>
+  </table>`;
+  return;
 }
 
 /* -----------------
 FAIRLY FORMAT
 -----------------*/
-if(/^F[0-5]\d{6}$/.test(serial)){  // <-- corrected: 6 digits after F
-    let yearCode = serial.charAt(1);
-    let monthCode = serial.substring(2,4);
-    let build = serial.substring(4,8);
+if(/^F[0-5]\d{6}$/.test(serial)){
+  let yearCode = serial.charAt(1);
+  let monthCode = serial.substring(2,4);
+  let build = serial.substring(4,8);
 
-    let fairYears={"0":"1980","1":"1981","2":"1982","3":"1983","4":"1984","5":"1985"};
-    let year=fairYears[yearCode];
+  let fairYears={"0":"1980","1":"1981","2":"1982","3":"1983","4":"1984","5":"1985"};
+  let year=fairYears[yearCode];
 
-    // Convert month number to month name
-    let monthNum=parseInt(monthCode,10);
-    let monthName = (monthNum>=1 && monthNum<=12) ? 
-        new Date(2000, monthNum-1, 1)
-        .toLocaleString('default',{month:'long'}) 
-        : "Unknown";
+  let monthNum=parseInt(monthCode,10);
+  let monthName = (monthNum>=1 && monthNum<=12) ? 
+      new Date(2000, monthNum-1, 1).toLocaleString('default',{month:'long'}) 
+      : "Unknown";
 
-    let manufacturer="Fairly";
-    let model="???"; // fill later
-    let generation="???"; // fill later
-    let productionWindow="???"; // fill later
-    let frameMaterial="???"; // fill later
-    let bottomBracket="???"; // fill later
-    let characteristics="???"; // fill later
-    let notes=""; // fill later
+  let manufacturer="Fairly";
+  let model="???";
+  let generation="???";
+  let productionWindow="???";
+  let frameMaterial="???";
+  let bottomBracket="???";
+  let characteristics="???";
+  let notes="";
 
-    result.innerHTML =
-    `<div class="result-title">Serial Number Details</div>
-    <table class="result-table">
-    <tr><td>Manufacturer:</td><td>${manufacturer}</td></tr>
-    <tr><td>Year:</td><td>${year}</td></tr>
-    <tr><td>Month:</td><td>${monthName}</td></tr>
-    <tr><td>Build Number:</td><td>${build}</td></tr>
-    <tr><td>Model:</td><td>${model}</td></tr>
-    <tr><td>Generation:</td><td>${generation}</td></tr>
-    <tr><td>Production Window:</td><td>${productionWindow}</td></tr>
-    <tr><td>Frame Material:</td><td>${frameMaterial}</td></tr>
-    <tr><td>Bottom Bracket:</td><td>${bottomBracket}</td></tr>
-    <tr><td>Characteristics:</td><td>${characteristics}</td></tr>
-    <tr><td>Notes:</td><td>${notes}</td></tr>
-    </table>`;
-    return;
+  result.innerHTML =
+  `<div class="result-title">Serial Number Details</div>
+  <table class="result-table">
+  <tr><td>Manufacturer:</td><td>${manufacturer}</td></tr>
+  <tr><td>Year:</td><td>${year}</td></tr>
+  <tr><td>Month:</td><td>${monthName}</td></tr>
+  <tr><td>Build Number:</td><td>${build}</td></tr>
+  <tr><td>Model:</td><td>${model}</td></tr>
+  <tr><td>Generation:</td><td>${generation}</td></tr>
+  <tr><td>Production Window:</td><td>${productionWindow}</td></tr>
+  <tr><td>Frame Material:</td><td>${frameMaterial}</td></tr>
+<tr><td>Bottom Bracket:</td><td>${bottomBracket}</td></tr>
+<tr><td>Characteristics:</td><td>${characteristics}</td></tr>
+<tr><td>Notes:</td><td>${notes}</td></tr>
+</table>`;
+return;
 }
 
 /* -----------------

@@ -262,13 +262,22 @@ if(/^VM\d{3,5}$/.test(serial)){
 KOIZUMI KANJI FORMAT
 -----------------*/
 if(/^\d[A-Z]\d{3,4}[A-Z]?$/.test(serial)){
+
     // Clean input
     serial = serial.toUpperCase().replace(/\s+/g,'');
 
     let yearCode = serial.charAt(0);
     let monthCode = serial.charAt(1);
-    let build = serial.substring(2, serial.length - 1);
-    let manStamp = serial.length > (build.length + 2) ? serial.charAt(serial.length - 1) : "";
+    let build = "";
+
+    // Correctly extract build number
+    if(serial.length === 5){        // e.g., 1A123
+        build = serial.substring(2); // digits 3–5
+    } else if(serial.length === 6){ // e.g., 1A1234 (no stamp)
+        build = serial.substring(2); // digits 3–6
+    } else if(serial.length === 7){ // e.g., 1A1234K (optional stamp ignored for now)
+        build = serial.substring(2,6); // digits 3–6
+    }
 
     // Year mapping
     const koizumiYears = {
@@ -279,18 +288,17 @@ if(/^\d[A-Z]\d{3,4}[A-Z]?$/.test(serial)){
 
     // Month mapping
     const koizumiMonths = {
-        A:"January",B:"February",C:"March",D:"April",E:"May",F:"June",
-        G:"July",H:"August",I:"September",X:"September",J:"October",
-        K:"November",L:"December"
+        A:"Jan", B:"Feb", C:"Mar", D:"Apr", E:"May", F:"Jun",
+        G:"Jul", H:"Aug", X:"Sep", J:"Oct", K:"Nov", L:"Dec"
     };
     let month = koizumiMonths[monthCode] || "Unknown";
 
-    // Model / Generation / Production window logic
+    // Model / Generation / Production window
     let manufacturer = "Koizumi";
-    let model = "Pro"; // default
-    let generation = "1st Generation Pro"; // default
-    let productionWindow = "March – June 1979"; // default
-    
+    let model = "Pro"; 
+    let generation = "1st Generation Pro";
+    let productionWindow = "March – June 1979";
+
     // Special rule for serials starting with 9
     if(yearCode === "9"){
         generation = "2nd Generation Pro (Large Pro)";
@@ -300,7 +308,7 @@ if(/^\d[A-Z]\d{3,4}[A-Z]?$/.test(serial)){
     let frameMaterial = "Chromoly";
     let bottomBracket = "US Bottom Bracket Shell";
     let characteristics = "Early versions fabricated with Chromoly 2mm rear dropouts and Chromoly Dual Dropout Forks";
-    let notes = manStamp ? "Manufacturer stamp: " + manStamp : "";
+    let notes = ""; // left blank for now
 
     // Output table
     result.innerHTML =

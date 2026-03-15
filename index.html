@@ -158,37 +158,37 @@ return;
 }
 
 /* -----------------
-KOIZUMI VM FORMAT (1979)
+KOIZUMI VM FORMAT
 -----------------*/
 if(/^VM\d{3,5}$/.test(serial)){
-let build = serial.substring(2);
-let manufacturer="Koizumi";
-let year="1979";
-let month="March – June";
-let model="???"; // provide later
-let generation="???"; // provide later
-let productionWindow="???"; // provide later
-let frameMaterial="???"; // provide later
-let bottomBracket="???"; // provide later
-let characteristics="???"; // provide later
-let notes="Early Koizumi production, build number only";
+    let build = serial.substring(2);
+    let manufacturer="Koizumi";
+    let year="1979";
+    let month="March – June";
+    let model="Pro (Large Pro)";
+    let generation="1st Generation Pro";
+    let productionWindow="March – June 1979";
+    let frameMaterial="Chromoly";
+    let bottomBracket="US Bottom Bracket Shell";
+    let characteristics="Early versions fabricated with Chromoly 2mm rear dropouts and Chromoly Dual Dropout Forks";
+    let notes="";
 
-result.innerHTML =
-`<div class="result-title">Serial Number Details</div>
-<table class="result-table">
-<tr><td>Manufacturer:</td><td>${manufacturer}</td></tr>
-<tr><td>Year:</td><td>${year}</td></tr>
-<tr><td>Month:</td><td>${month}</td></tr>
-<tr><td>Build Number:</td><td>${build}</td></tr>
-<tr><td>Model:</td><td>${model}</td></tr>
-<tr><td>Generation:</td><td>${generation}</td></tr>
-<tr><td>Production Window:</td><td>${productionWindow}</td></tr>
-<tr><td>Frame Material:</td><td>${frameMaterial}</td></tr>
-<tr><td>Bottom Bracket:</td><td>${bottomBracket}</td></tr>
-<tr><td>Characteristics:</td><td>${characteristics}</td></tr>
-<tr><td>Notes:</td><td>${notes}</td></tr>
-</table>`;
-return;
+    result.innerHTML =
+    `<div class="result-title">Serial Number Details</div>
+    <table class="result-table">
+    <tr><td>Manufacturer:</td><td>${manufacturer}</td></tr>
+    <tr><td>Year:</td><td>${year}</td></tr>
+    <tr><td>Month:</td><td>${month}</td></tr>
+    <tr><td>Build Number:</td><td>${build}</td></tr>
+    <tr><td>Model:</td><td>${model}</td></tr>
+    <tr><td>Generation:</td><td>${generation}</td></tr>
+    <tr><td>Production Window:</td><td>${productionWindow}</td></tr>
+    <tr><td>Frame Material:</td><td>${frameMaterial}</td></tr>
+    <tr><td>Bottom Bracket:</td><td>${bottomBracket}</td></tr>
+    <tr><td>Characteristics:</td><td>${characteristics}</td></tr>
+    <tr><td>Notes:</td><td>${notes}</td></tr>
+    </table>`;
+    return;
 }
 
 /* -----------------

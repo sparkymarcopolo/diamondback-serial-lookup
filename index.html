@@ -237,7 +237,7 @@ return;
 /* -----------------
 FAIRLY FORMAT
 -----------------*/
-if(/^F[0-5]\d{5}$/.test(serial)){
+if(/^F[0-5]\d{6}$/.test(serial)){  // <-- corrected: 6 digits after F
     let yearCode = serial.charAt(1);
     let monthCode = serial.substring(2,4);
     let build = serial.substring(4,8);

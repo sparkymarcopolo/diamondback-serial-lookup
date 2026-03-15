@@ -244,19 +244,22 @@ if(/^F[0-5]\d{5}$/.test(serial)){
 
     let fairYears={"0":"1980","1":"1981","2":"1982","3":"1983","4":"1984","5":"1985"};
     let year=fairYears[yearCode];
+
+    // Convert month number to month name
     let monthNum=parseInt(monthCode,10);
     let monthName = (monthNum>=1 && monthNum<=12) ? 
-        new Date(2000,monthNum-1,1).toLocaleString('default',{month:'long'}) 
+        new Date(2000, monthNum-1, 1)
+        .toLocaleString('default',{month:'long'}) 
         : "Unknown";
 
     let manufacturer="Fairly";
-    let model="???"; // provide later
-    let generation="???"; // provide later
-    let productionWindow="???"; // provide later
-    let frameMaterial="???"; // provide later
-    let bottomBracket="???"; // provide later
-    let characteristics="???"; // provide later
-    let notes="";
+    let model="???"; // fill later
+    let generation="???"; // fill later
+    let productionWindow="???"; // fill later
+    let frameMaterial="???"; // fill later
+    let bottomBracket="???"; // fill later
+    let characteristics="???"; // fill later
+    let notes=""; // fill later
 
     result.innerHTML =
     `<div class="result-title">Serial Number Details</div>

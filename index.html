@@ -271,11 +271,11 @@ if(/^\d[A-Z]\d{3,4}[A-Z]?$/.test(serial)){
     let build = "";
 
     // Correctly extract build number
-    if(serial.length === 5){        // e.g., 1A123
+    if(serial.length === 5){        // e.g., 9A123
         build = serial.substring(2); // digits 3–5
-    } else if(serial.length === 6){ // e.g., 1A1234 (no stamp)
+    } else if(serial.length === 6){ // e.g., 9A1234 (no stamp)
         build = serial.substring(2); // digits 3–6
-    } else if(serial.length === 7){ // e.g., 1A1234K (optional stamp ignored for now)
+    } else if(serial.length === 7){ // e.g., 9A1234K (optional stamp ignored)
         build = serial.substring(2,6); // digits 3–6
     }
 
@@ -293,15 +293,16 @@ if(/^\d[A-Z]\d{3,4}[A-Z]?$/.test(serial)){
     };
     let month = koizumiMonths[monthCode] || "Unknown";
 
-    // Model / Generation / Production window
+    // Initialize fields
     let manufacturer = "Koizumi";
-    let model = "Pro"; 
-    let generation = "1st Generation Pro";
-    let productionWindow = "March – June 1979";
+    let model = "";           // blank unless yearCode = 9
+    let generation = "";      // blank unless yearCode = 9
+    let productionWindow = ""; // blank unless yearCode = 9
 
-    // Special rule for serials starting with 9
+    // Only serials starting with 9 are Pro / Large Pro
     if(yearCode === "9"){
-        generation = "2nd Generation Pro (Large Pro)";
+        model = "Pro / Large Pro"; 
+        generation = "2nd Generation Pro";
         productionWindow = "June 1979 – April 1981";
     }
 

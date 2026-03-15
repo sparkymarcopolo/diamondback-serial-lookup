@@ -19,7 +19,7 @@ body{
   padding:40px;
   border-radius:10px;
   box-shadow:0 6px 20px rgba(0,0,0,0.15);
-  width:900px;
+  width:720px;
   text-align:center;
 }
 
@@ -74,67 +74,15 @@ button:hover{
   font-weight:bold;
   width:200px;
 }
-  .intro{
-font-size:16px;
-margin-bottom:15px;
-}
-
-.instructions{
-background:#f8f8f8;
-border:1px solid #ddd;
-padding:15px;
-border-radius:6px;
-margin-bottom:20px;
-text-align:left;
-}
-
-.instructions ul{
-margin-top:8px;
-margin-bottom:10px;
-padding-left:20px;
-}
-
-.formats{
-font-size:14px;
-color:#333;
-}
-
-.lookup{
-margin-top:10px;
-}
 </style>
 </head>
 <body>
+<div class="container">
 <h1>Serial Lookup & Model Identification</h1>
-
-<p class="intro">
-Enter your Diamond Back frame serial number below to identify the manufacturer,
-production date and model information.
-</p>
-
-<div class="instructions">
-<strong>Important:</strong>
-<ul>
-<li>Enter the serial number exactly as stamped on the frame.</li>
-<li><strong>Do not include spaces.</strong></li>
-<li>Serial numbers are typically found on the <strong>bottom bracket shell</strong>.</li>
-<li>This lookup currently supports the following formats:</li>
-</ul>
-
-<ul class="formats">
-<li><strong>Jere:</strong> 3 letters followed by 3 numbers (Example: <em>JAG123</em>)</li>
-<li><strong>Koizumi VM:</strong> VM followed by 3–5 digits (Example: <em>VM12345</em>)</li>
-<li><strong>Koizumi Kanji:</strong> Number + Letter + Build digits (Example: <em>1A1234</em>)</li>
-<li><strong>Fairly:</strong> F + year digit + month + build number (Example: <em>F2034567</em>)</li>
-</ul>
-</div>
-
-<div class="lookup">
-<input type="text" id="serialInput" placeholder="Enter serial number">
-<button onclick="lookupSerial()">Lookup Serial</button>
-</div>
-
+<input type="text" id="serialInput" placeholder="Enter Serial Number">
+<button onclick="lookupSerial()">Lookup</button>
 <div id="result"></div>
+</div>
 
 <script>
 function lookupSerial(){

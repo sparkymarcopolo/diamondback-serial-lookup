@@ -274,210 +274,171 @@ if(/^[WJ][A-L][GHI]\d{3}$/.test(serial)){
 }
 
 /* -----------------
-KOIZUMI KANJI FORMAT (FINAL)
+KOIZUMI VM FORMAT
+-----------------*/
+if(/^VM\d{3,5}$/.test(serial)){
+  let build = serial.substring(2);
+  let manufacturer="Koizumi";
+  let year="1979";
+  let month="March – June";
+  let model="Pro (Large Pro)";
+  let generation="1st Generation Pro";
+  let productionWindow="March – June 1979";
+  let frameMaterial="Chromoly";
+  let bottomBracket="US Bottom Bracket Shell";
+  let characteristics="Early versions fabricated with Chromoly 2mm rear dropouts and Chromoly Dual Dropout Forks";
+  let notes="";
+
+  result.innerHTML =
+  `<div class="result-title">Serial Number Details</div>
+  <table class="result-table">
+  <tr><td>Manufacturer:</td><td>${manufacturer}</td></tr>
+  <tr><td>Year:</td><td>${year}</td></tr>
+  <tr><td>Month:</td><td>${month}</td></tr>
+  <tr><td>Build Number:</td><td>${build}</td></tr>
+  <tr><td>Model:</td><td>${model}</td></tr>
+  <tr><td>Generation:</td><td>${generation}</td></tr>
+  <tr><td>Production Window:</td><td>${productionWindow}</td></tr>
+  <tr><td>Frame Material:</td><td>${frameMaterial}</td></tr>
+  <tr><td>Bottom Bracket:</td><td>${bottomBracket}</td></tr>
+  <tr><td>Characteristics:</td><td>${characteristics}</td></tr>
+  <tr><td>Notes:</td><td>${notes}</td></tr>
+  </table>`;
+  return;
+}
+
+/* -----------------
+KOIZUMI KANJI FORMAT (with dropdown selectors)
 -----------------*/
 if(/^\d[A-Z]\d{3,4}[A-Z]?$/.test(serial)){
+  let yearCode = serial.charAt(0);
+  let monthCode = serial.charAt(1);
+  let build = serial.length >= 6 ? serial.substring(2,6) : serial.substring(2);
 
-    serial = serial.toUpperCase().replace(/\s+/g,'');
+  const koizumiYears = {"9":"1979","0":"1980","1":"1981","2":"1982","3":"1983","4":"1984"};
+  const koizumiMonths = {A:"Jan", B:"Feb", C:"Mar", D:"Apr", E:"May", F:"Jun",
+                         G:"Jul", H:"Aug", X:"Sep", J:"Oct", K:"Nov", L:"Dec"};
 
-    let yearCode = serial.charAt(0);
-    let monthCode = serial.charAt(1);
-    let build = "";
+  let year = koizumiYears[yearCode] || "Unknown";
+  let month = koizumiMonths[monthCode] || "Unknown";
 
-    if(serial.length === 5){
-        build = serial.substring(2);
-    } else if(serial.length === 6){
-        build = serial.substring(2);
-    } else if(serial.length === 7){
-        build = serial.substring(2,6);
-    }
+  let manufacturer="Koizumi";
+  let model="";
+  let generation="";
+  let productionWindow="";
+  let frameMaterial="";
+  let bottomBracket="";
+  let characteristics="";
+  let notes="";
 
-    const years = {
-        "9":"1979","0":"1980","1":"1981","2":"1982",
-        "3":"1983","4":"1984"
-    };
+  // Model Identification
+  if(yearCode==="9"){
+    model="Pro / Large Pro";
+    generation="2nd Generation Pro";
+    productionWindow="June 1979 – April 1981";
+  }
+  else if((yearCode==="0" || yearCode==="1") && tail==="non-looptail"){
+    model="TK";
+    frameMaterial="Trimoly";
+    bottomBracket="US";
+    characteristics="Large Gusset";
+    generation="n/a";
+  }
+  else if(yearCode==="1" && tail==="looptail" && bb==="Euro"){
+    model="Pro Mini";
+    frameMaterial="Chromoly";
+    bottomBracket="Euro";
+    characteristics="2mm rear dropout";
+    generation="n/a";
+  }
+  else if(["1","2","3"].includes(yearCode) && tail==="looptail" && bb==="US" && seatTube==="laidback"){
+    model="Pro Medium";
+    frameMaterial="Chromoly";
+    bottomBracket="US";
+    characteristics="2mm rear dropout";
+    generation="n/a";
+  }
+  else if(["1","2"].includes(yearCode) && tail==="looptail" && bb==="US" && seatTube==="nearvertical" && year >= 1981 && year <= 1982){
+    model="Pro Senior";
+    generation="1st Generation";
+    productionWindow="April 1981 – March 1982";
+    frameMaterial="Chromoly";
+    bottomBracket="US";
+    characteristics="2mm rear dropout";
+  }
+  else if(["2","3"].includes(yearCode) && tail==="looptail" && bb==="US" && seatTube==="nearvertical" && year >= 1982 && year <= 1983){
+    model="Pro Senior";
+    generation="2nd Generation";
+    productionWindow="April 1982 – March 1983";
+    frameMaterial="Chromoly";
+    bottomBracket="US";
+    characteristics="2mm rear dropout leverage update";
+  }
+  else if(["1","2","3"].includes(yearCode) && tail==="looptail" && dropout==="3mm" && frameMaterial.toLowerCase()==="trimoly"){
+    model="Silver Streak";
+    generation="1st Generation";
+    productionWindow="September 1981 – September 1983";
+    frameMaterial="Trimoly";
+    bottomBracket="US";
+    characteristics="3mm rear dropout";
+  }
+  else if(yearCode==="2" && tail==="looptail" && bb==="US" && year==1982){
+    model="Harry Leary Turbo";
+    generation="1st Generation";
+    productionWindow="April 1982 – May 1982";
+    frameMaterial="Chromoly";
+    bottomBracket="US";
+    characteristics="2mm rear dropout";
+  }
+  else if(["2","3"].includes(yearCode) && tail==="looptail" && bb==="US" && (year==1982 || year==1983)){
+    model="Harry Leary Turbo";
+    generation="2nd Generation";
+    productionWindow="April 1982 – September 1983";
+    frameMaterial="Chromoly";
+    bottomBracket="US";
+    characteristics="2mm rear dropout leverage update";
+  }
+  else if(yearCode==="4" && tail==="looptail" && bb==="US" && year==1984){
+    model="Harry Leary Turbo";
+    generation="3rd Generation";
+    productionWindow="April 1984 – September 1984";
+    frameMaterial="Chromoly";
+    bottomBracket="US";
+    characteristics="Small diamond gusset";
+  }
+  else if(yearCode==="3" && tail==="non-looptail" && bb==="Euro"){
+    model="Turbo Lite";
+    frameMaterial="Chromoly";
+    bottomBracket="Euro";
+    characteristics="Small diamond gusset";
+  }
+  else if(["3","4"].includes(yearCode) && tail==="non-looptail" && bb==="US"){
+    model="Formula One";
+    frameMaterial="Chromoly";
+    bottomBracket="US";
+    characteristics="Small diamond gusset";
+  }
+  else{
+    model="Unknown Kanji Model";
+  }
 
-    const months = {
-        A:"January", B:"February", C:"March", D:"April",
-        E:"May", F:"June", G:"July", H:"August",
-        X:"September", J:"October", K:"November", L:"December"
-    };
-
-    let year = years[yearCode] || "Unknown";
-    let month = months[monthCode] || "Unknown";
-
-    // USER INPUTS (safe defaults)
-    let looptail = document.getElementById("looptail")?.value || "";
-    let bb = document.getElementById("bb")?.value || "";
-    let dropout = document.getElementById("dropout")?.value || "";
-    let gusset = document.getElementById("gusset")?.value || "";
-
-    let manufacturer = "Koizumi";
-    let model = "Unknown";
-    let generation = "";
-    let productionWindow = "";
-    let frameMaterial = "";
-    let bottomBracket = "";
-    let characteristics = "";
-    let notes = "";
-
-    /* =====================
-       YEAR CODE 9 (1979–81)
-       ===================== */
-    if(yearCode === "9"){
-        model = "Pro / Large Pro";
-        generation = "2nd Generation Pro";
-        productionWindow = "June 1979 – April 1981";
-        frameMaterial = "Chromoly";
-        bottomBracket = "US Bottom Bracket Shell";
-        characteristics = "Looptail, Large Diamond Gusset, 3mm Dropouts";
-    }
-
-    /* =====================
-       YEAR CODE 0 (1980)
-       ===================== */
-    else if(yearCode === "0"){
-        model = "TK";
-        productionWindow = "1980 – 1981";
-        frameMaterial = "Trimoly";
-        bottomBracket = "US Bottom Bracket Shell";
-        characteristics = "Non Looptail, Large Gusset";
-    }
-
-    /* =====================
-       YEAR CODE 1 (1981)
-       ===================== */
-    else if(yearCode === "1"){
-
-        if(looptail === "yes" && bb === "euro" && dropout === "2" && gusset === "large"){
-            model = "Pro Mini";
-            productionWindow = "1981";
-            frameMaterial = "Chromoly";
-            bottomBracket = "Euro Bottom Bracket Shell";
-            characteristics = "Looptail, Large Diamond Gusset, 2mm Dropouts";
-        }
-
-        else if(looptail === "no" && gusset === "large"){
-            model = "TK";
-            productionWindow = "1980 – 1981";
-            frameMaterial = "Trimoly";
-            bottomBracket = "US Bottom Bracket Shell";
-        }
-
-        else if(looptail === "yes" && bb === "us" && dropout === "3"){
-            model = "Silver Streak";
-            productionWindow = "Sept 1981 – Sept 1983";
-            frameMaterial = "Trimoly";
-            bottomBracket = "US Bottom Bracket Shell";
-            characteristics = "Looptail, 3mm Dropouts";
-        }
-
-        else if(looptail === "yes" && bb === "us" && dropout === "2"){
-            model = "Pro Medium / Pro Senior (1st Gen)";
-            productionWindow = "April 1981 – March 1982";
-            frameMaterial = "Chromoly";
-            bottomBracket = "US Bottom Bracket Shell";
-            notes = "Medium and Senior share features — geometry required for exact identification.";
-        }
-
-        else{
-            model = "1981 Pro Range (Exact model requires more detail)";
-        }
-    }
-
-    /* =====================
-       YEAR CODE 2 (1982)
-       ===================== */
-    else if(yearCode === "2"){
-
-        if(looptail === "yes" && dropout === "3"){
-            model = "Silver Streak";
-            productionWindow = "Sept 1981 – Sept 1983";
-            frameMaterial = "Trimoly";
-        }
-
-        else if(looptail === "yes" && dropout === "2" && gusset === "large"){
-            model = "Pro Senior (2nd Gen) or Harry Leary Turbo";
-            productionWindow = "April 1982 – March 1983";
-            characteristics = "Rear leverage change";
-            notes = "Frame shared with Harry Leary Turbo. Turbo models originally had a 'Turbo Smoke' blue finish which may have been removed.";
-        }
-
-        else{
-            model = "1982 Pro Range (Exact model requires more detail)";
-        }
-    }
-
-    /* =====================
-       YEAR CODE 3 (1983)
-       ===================== */
-    else if(yearCode === "3"){
-
-        if(looptail === "no" && bb === "euro" && gusset === "none"){
-            model = "Turbo Lite";
-            productionWindow = "July 1983 – April 1984";
-            bottomBracket = "Euro Bottom Bracket Shell";
-        }
-
-        else if(looptail === "no" && bb === "us" && gusset === "small"){
-            model = "Formula One";
-            productionWindow = "Nov 1983 – Sept 1984";
-        }
-
-        else if(looptail === "yes" && dropout === "3"){
-            model = "Silver Streak";
-            productionWindow = "Sept 1981 – Sept 1983";
-        }
-
-        else if(looptail === "yes" && dropout === "2"){
-            model = "Pro Medium / Pro Senior (2nd Gen) / Harry Leary Turbo";
-            notes = "Shared frame characteristics — decals or original finish required for exact identification.";
-        }
-
-        else{
-            model = "1983 Range (Exact model requires more detail)";
-        }
-    }
-
-    /* =====================
-       YEAR CODE 4 (1984)
-       ===================== */
-    else if(yearCode === "4"){
-
-        if(looptail === "yes" && gusset === "small"){
-            model = "Harry Leary Turbo (3rd Gen)";
-            productionWindow = "April – Sept 1984";
-        }
-
-        else if(looptail === "no" && bb === "us"){
-            model = "Formula One";
-            productionWindow = "Nov 1983 – Sept 1984";
-        }
-
-        else{
-            model = "1984 Range (Exact model requires more detail)";
-        }
-    }
-
-    /* =====================
-       OUTPUT
-       ===================== */
-    result.innerHTML =
-    `<div class="result-title">Serial Number Details</div>
-    <table class="result-table">
-    <tr><td>Manufacturer:</td><td>${manufacturer}</td></tr>
-    <tr><td>Year:</td><td>${year}</td></tr>
-    <tr><td>Month:</td><td>${month}</td></tr>
-    <tr><td>Build Number:</td><td>${build}</td></tr>
-    <tr><td>Model:</td><td>${model}</td></tr>
-    <tr><td>Generation:</td><td>${generation}</td></tr>
-    <tr><td>Production Window:</td><td>${productionWindow}</td></tr>
-    <tr><td>Frame Material:</td><td>${frameMaterial}</td></tr>
-    <tr><td>Bottom Bracket:</td><td>${bottomBracket}</td></tr>
-    <tr><td>Characteristics:</td><td>${characteristics}</td></tr>
-    <tr><td>Notes:</td><td>${notes}</td></tr>
-    </table>`;
-    return;
+  // Output Kanji Result
+  result.innerHTML =
+  `<div class="result-title">Serial Number Details</div>
+  <table class="result-table">
+  <tr><td>Manufacturer:</td><td>${manufacturer}</td></tr>
+  <tr><td>Year:</td><td>${year}</td></tr>
+  <tr><td>Month:</td><td>${month}</td></tr>
+  <tr><td>Build Number:</td><td>${build}</td></tr>
+  <tr><td>Model:</td><td>${model}</td></tr>
+  <tr><td>Generation:</td><td>${generation}</td></tr>
+  <tr><td>Production Window:</td><td>${productionWindow}</td></tr>
+  <tr><td>Frame Material:</td><td>${frameMaterial}</td></tr>
+  <tr><td>Bottom Bracket:</td><td>${bottomBracket}</td></tr>
+  <tr><td>Characteristics:</td><td>${characteristics}</td></tr>
+  <tr><td>Notes:</td><td>${notes}</td></tr>
+  </table>`;
+  return;
 }
 
 /* -----------------

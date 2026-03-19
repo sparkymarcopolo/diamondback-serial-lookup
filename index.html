@@ -333,7 +333,7 @@ let notes="";
 /* -----------------
 MODEL LOGIC
 -----------------*/
-// ✅ LARGE PRO (WITH STRICT DATE WINDOW)
+// ✅ LARGE PRO (FINAL FIXED VERSION)
 if(
   ["9","0","1"].includes(yearCode) &&
   tail==="looptail" &&
@@ -341,15 +341,13 @@ if(
   seatTube==="relaxed"
 ){
 
-  // Convert to comparable numeric date
   const monthIndex = {
     A:1,B:2,C:3,D:4,E:5,F:6,G:7,H:8,X:9,J:10,K:11,L:12
   };
 
-  let y = parseInt(year);
+  let y = Number(year);   // force number
   let m = monthIndex[monthCode];
 
-  // Production window: June 1979 → April 1981
   let inWindow =
     (y === 1979 && m >= 6) ||
     (y === 1980) ||
@@ -361,7 +359,9 @@ if(
     productionWindow="June 1979 – June 1981";
     characteristics="3mm rear dropout";
   } else {
-    notes="Frame matches Large Pro spec but falls outside production window.";
+    // 🔥 IMPORTANT: still assign model
+    model="Pro / Large Pro";
+    notes="Matches Large Pro geometry but outside production window.";
   }
 }
 

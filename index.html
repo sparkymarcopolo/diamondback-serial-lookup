@@ -333,12 +333,36 @@ let notes="";
 /* -----------------
 MODEL LOGIC
 -----------------*/
-// ✅ Large Pro
-if(yearCode==="9" && tail==="looptail" && dropout==="3mm" && seatTube==="relaxed"){
-  model="Pro / Large Pro";
-  generation="2nd Generation Pro";
-  productionWindow="June 1979 – April 1981";
-  characteristics="3mm rear dropout";
+// ✅ LARGE PRO (WITH STRICT DATE WINDOW)
+if(
+  ["9","0","1"].includes(yearCode) &&
+  tail==="looptail" &&
+  dropout==="3mm" &&
+  seatTube==="relaxed"
+){
+
+  // Convert to comparable numeric date
+  const monthIndex = {
+    A:1,B:2,C:3,D:4,E:5,F:6,G:7,H:8,X:9,J:10,K:11,L:12
+  };
+
+  let y = parseInt(year);
+  let m = monthIndex[monthCode];
+
+  // Production window: June 1979 → April 1981
+  let inWindow =
+    (y === 1979 && m >= 6) ||
+    (y === 1980) ||
+    (y === 1981 && m <= 4);
+
+  if(inWindow){
+    model="Pro / Large Pro";
+    generation="2nd Generation Pro";
+    productionWindow="June 1979 – April 1981";
+    characteristics="3mm rear dropout";
+  } else {
+    notes="Frame matches Large Pro spec but falls outside production window.";
+  }
 }
 
 // ✅ Pro Mini

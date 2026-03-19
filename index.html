@@ -4,35 +4,134 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Serial Lookup & Model Identification</title>
+
 <style>
-body{font-family:Arial,sans-serif;background:#f4f4f4;display:flex;justify-content:center;align-items:flex-start;padding-top:50px}
-.container{background:white;padding:40px;border-radius:10px;box-shadow:0 6px 20px rgba(0,0,0,0.15);width:720px;text-align:center}
-h1{margin-bottom:10px}
-.intro{font-size:15px;margin-bottom:15px;color:#444}
-.instructions{background:#fafafa;border:1px solid #ddd;border-radius:6px;padding:15px;margin-bottom:20px;text-align:left;font-size:14px}
-.instructions ul{margin:8px 0 0 18px}
-.formats{margin-top:10px;color:#333}
-input[type="text"]{width:60%;padding:10px;font-size:16px;border-radius:5px;border:1px solid #ccc}
-select{width:100%;padding:8px;margin-top:5px;margin-bottom:10px;font-size:14px}
-button{padding:10px 20px;font-size:16px;border-radius:5px;border:none;background:#007BFF;color:white;cursor:pointer;margin-left:10px}
-button:hover{background:#0056b3}
-.result-title{font-size:20px;margin-top:30px;margin-bottom:15px;font-weight:bold}
-.result-table{width:100%;border-collapse:collapse;text-align:left;font-size:16px}
-.result-table td{padding:6px 12px;border-bottom:1px solid #ddd;vertical-align:top}
-.result-table td:first-child{font-weight:bold;width:200px}
+body{
+  font-family: Arial, sans-serif;
+  background:#f4f4f4;
+  display:flex;
+  justify-content:center;
+  align-items:flex-start;
+  padding-top:50px;
+}
+
+.container{
+  background:white;
+  padding:40px;
+  border-radius:10px;
+  box-shadow:0 6px 20px rgba(0,0,0,0.15);
+  width:720px;
+  text-align:center;
+}
+
+h1{
+  margin-bottom:10px;
+}
+
+.intro{
+  font-size:15px;
+  margin-bottom:15px;
+  color:#444;
+}
+
+.instructions{
+  background:#fafafa;
+  border:1px solid #ddd;
+  border-radius:6px;
+  padding:15px;
+  margin-bottom:20px;
+  text-align:left;
+  font-size:14px;
+}
+
+.instructions ul{
+  margin:8px 0 0 18px;
+}
+
+.formats{
+  margin-top:10px;
+  color:#333;
+}
+
+input[type="text"]{
+  width:60%;
+  padding:10px;
+  font-size:16px;
+  border-radius:5px;
+  border:1px solid #ccc;
+}
+
+select{
+  width:100%;
+  padding:8px;
+  margin-top:5px;
+  margin-bottom:10px;
+  font-size:14px;
+}
+
+button{
+  padding:10px 20px;
+  font-size:16px;
+  border-radius:5px;
+  border:none;
+  background:#007BFF;
+  color:white;
+  cursor:pointer;
+  margin-left:10px;
+}
+
+button:hover{
+  background:#0056b3;
+}
+
+.result-title{
+  font-size:20px;
+  margin-top:30px;
+  margin-bottom:15px;
+  font-weight:bold;
+}
+
+.result-table{
+  width:100%;
+  border-collapse: collapse;
+  text-align:left;
+  font-size:16px;
+}
+
+.result-table td{
+  padding:6px 12px;
+  border-bottom:1px solid #ddd;
+  vertical-align:top;
+}
+
+.result-table td:first-child{
+  font-weight:bold;
+  width:200px;
+}
 </style>
 </head>
+
 <body>
+
 <div class="container">
+
 <h1>Serial Lookup & Model Identification</h1>
-<p class="intro">Enter your Diamond Back frame serial number to identify the manufacturer, production date and model details.</p>
+
+<p class="intro">
+Enter your Diamond Back frame serial number to identify the manufacturer,
+production date and model details.
+</p>
+
 <div class="instructions">
+
 <strong>Important</strong>
+
 <ul>
 <li>Enter the serial exactly as stamped on the frame</li>
-<li><strong>No spaces</strong> are required</li>
+<li><strong>No spaces</strong> are required (spaces will be automatically removed)</li>
 <li>Frame Serials are typically located on the <strong>underside of the bottom bracket shell</strong> or <strong>inside rear dropout</strong></li>
 </ul>
+
 <div class="formats">
 <strong>Supported Serial Formats</strong>
 <ul>
@@ -42,16 +141,21 @@ button:hover{background:#0056b3}
 <li>Fairly — Example: F2034567</li>
 </ul>
 </div>
+
 </div>
+
 <input type="text" id="serialInput" placeholder="Enter Serial Number">
+
+<!-- Kanji selectors -->
 <div style="margin-top:20px;text-align:left;">
   <label for="tailSelect"><strong>Frame Tail Type (optional)</strong></label><br>
   <select id="tailSelect">
     <option value="">Unknown</option>
     <option value="looptail">Looptail</option>
-    <option value="non-looptail">Non-Looptail</option>
+    <option value="nonlooptail">Non-Looptail</option>
   </select>
 </div>
+
 <div style="text-align:left;">
   <label for="bbSelect"><strong>Bottom Bracket Type (optional)</strong></label><br>
   <select id="bbSelect">
@@ -60,6 +164,7 @@ button:hover{background:#0056b3}
     <option value="Euro">Euro</option>
   </select>
 </div>
+
 <div style="text-align:left;">
   <label for="dropoutSelect"><strong>Rear Dropout Thickness (optional)</strong></label><br>
   <select id="dropoutSelect">
@@ -68,6 +173,7 @@ button:hover{background:#0056b3}
     <option value="3mm">3mm</option>
   </select>
 </div>
+
 <div style="text-align:left;">
   <label for="seatTubeSelect"><strong>Seat Tube Angle (optional)</strong></label><br>
   <select id="seatTubeSelect">
@@ -77,34 +183,78 @@ button:hover{background:#0056b3}
     <option value="nearvertical">Near Vertical</option>
   </select>
 </div>
+
 <button onclick="lookupSerial()">Lookup</button>
+
 <div id="result"></div>
+
 </div>
+
 <script>
 function lookupSerial(){
-let serial = document.getElementById("serialInput").value.toUpperCase().replace(/\s+/g,'');
-let tail = document.getElementById("tailSelect").value;
-let bb = document.getElementById("bbSelect").value;
-let dropout = document.getElementById("dropoutSelect").value;
-let seatTube = document.getElementById("seatTubeSelect").value;
-let result = document.getElementById("result");
+
+let serial=document.getElementById("serialInput").value;
+
+/* AUTO CLEAN USER INPUT */
+serial = serial.toUpperCase();
+serial = serial.replace(/\s+/g,'');
+
+let tail = document.getElementById("tailSelect")?.value || "";
+let bb = document.getElementById("bbSelect")?.value || "";
+let dropout = document.getElementById("dropoutSelect")?.value || "";
+let seatTube = document.getElementById("seatTubeSelect")?.value || "";
+
+let result=document.getElementById("result");
 result.innerHTML="";
 
 /* -----------------
-JERE FORMAT
------------------*/
+JERE FORMAT LLL###
+------------------*/
 if(/^[WJ][A-L][GHI]\d{3}$/.test(serial)){
   let monthCode = serial.charAt(1);
   let yearCode = serial.charAt(2);
   let build = serial.substring(3,6);
-  let months={A:"January",B:"February",C:"March",D:"April",E:"May",F:"June",G:"July",H:"August",I:"September",J:"October",K:"November",L:"December"};
-  let years={G:"1977",H:"1978",I:"1979"};
-  let year=years[yearCode];
-  let model="MX",generation="",productionWindow="",frameMaterial="Chromoly",bottomBracket="",characteristics="Looptail, Large Diamond Gusset",notes="";
-  if(year==="1977"){generation="1st Generation MX";bottomBracket="Euro Bottom Bracket Shell";productionWindow="September – December 1977";notes="First Diamond Back BMX model";}
-  if(year==="1978"){generation="2nd Generation MX";bottomBracket="US Bottom Bracket Shell";productionWindow="January 1978 – February 1979";}
-  if(year==="1979"){generation="2nd Generation MX";bottomBracket="US Bottom Bracket Shell";productionWindow="January 1978 – February 1979";notes="Final Jere fabrication period";}
-  result.innerHTML = `<div class="result-title">Serial Number Details</div>
+
+  let months={
+    A:"January",B:"February",C:"March",D:"April",E:"May",F:"June",
+    G:"July",H:"August",I:"September",J:"October",K:"November",L:"December"
+  };
+
+  let years={
+    G:"1977",
+    H:"1978",
+    I:"1979"
+  };
+
+  let year = years[yearCode];
+  let model="MX";
+  let generation="";
+  let productionWindow="";
+  let frameMaterial="Chromoly";
+  let bottomBracket="";
+  let characteristics="Looptail, Large Diamond Gusset";
+  let notes="";
+
+  if(year==="1977"){
+    generation="1st Generation MX";
+    bottomBracket="Euro Bottom Bracket Shell";
+    productionWindow="September – December 1977";
+    notes="First Diamond Back BMX model";
+  }
+  if(year==="1978"){
+    generation="2nd Generation MX";
+    bottomBracket="US Bottom Bracket Shell";
+    productionWindow="January 1978 – February 1979";
+  }
+  if(year==="1979"){
+    generation="2nd Generation MX";
+    bottomBracket="US Bottom Bracket Shell";
+    productionWindow="January 1978 – February 1979";
+    notes="Final Jere fabrication period. End of MX model name.";
+  }
+
+  result.innerHTML =
+  `<div class="result-title">Serial Number Details</div>
   <table class="result-table">
   <tr><td>Manufacturer:</td><td>Jere</td></tr>
   <tr><td>Year:</td><td>${year}</td></tr>
@@ -118,15 +268,28 @@ if(/^[WJ][A-L][GHI]\d{3}$/.test(serial)){
   <tr><td>Bottom Bracket:</td><td>${bottomBracket}</td></tr>
   <tr><td>Characteristics:</td><td>${characteristics}</td></tr>
   <tr><td>Notes:</td><td>${notes}</td></tr>
-  </table>`; return;
+  </table>`;
+  return;
 }
 
 /* -----------------
 KOIZUMI VM FORMAT
 -----------------*/
 if(/^VM\d{3,5}$/.test(serial)){
-  let build = serial.substring(2),manufacturer="Koizumi",year="1979",month="March – June",model="Pro (Large Pro)",generation="1st Generation Pro",productionWindow="March – June 1979",frameMaterial="Chromoly",bottomBracket="US Bottom Bracket Shell",characteristics="Early versions fabricated with Chromoly 2mm rear dropouts and Chromoly Dual Dropout Forks",notes="";
-  result.innerHTML = `<div class="result-title">Serial Number Details</div>
+  let build = serial.substring(2);
+  let manufacturer="Koizumi";
+  let year="1979";
+  let month="March – June";
+  let model="Pro (Large Pro)";
+  let generation="1st Generation Pro";
+  let productionWindow="March – June 1979";
+  let frameMaterial="Chromoly";
+  let bottomBracket="US Bottom Bracket Shell";
+  let characteristics="Early versions fabricated with Chromoly 2mm rear dropouts and Chromoly Dual Dropout Forks";
+  let notes="";
+
+  result.innerHTML =
+  `<div class="result-title">Serial Number Details</div>
   <table class="result-table">
   <tr><td>Manufacturer:</td><td>${manufacturer}</td></tr>
   <tr><td>Year:</td><td>${year}</td></tr>
@@ -139,50 +302,139 @@ if(/^VM\d{3,5}$/.test(serial)){
   <tr><td>Bottom Bracket:</td><td>${bottomBracket}</td></tr>
   <tr><td>Characteristics:</td><td>${characteristics}</td></tr>
   <tr><td>Notes:</td><td>${notes}</td></tr>
-  </table>`; return;
+  </table>`;
+  return;
 }
 
 /* -----------------
 KOIZUMI KANJI FORMAT
 -----------------*/
 if(/^\d[A-Z]\d{4}[A-Z]?$/.test(serial)){
-  let yearCode = serial.charAt(0);
-  let monthCode = serial.charAt(1);
-  let build = serial.substring(2,6);
-  let koizumiYears = {"9":"1979","0":"1980","1":"1981","2":"1982","3":"1983","4":"1984"};
-  let koizumiMonths = {A:"January",B:"February",C:"March",D:"April",E:"May",F:"June",G:"July",H:"August",X:"September",J:"October",K:"November",L:"December"};
-  let year = koizumiYears[yearCode];
-  let month = koizumiMonths[monthCode];
-  let manufacturer="Koizumi",model="Unknown Kanji Model",generation="",productionWindow="",frameMaterial="",bottomBracket="",characteristics="",notes="";
-  /* ----------------- MODEL LOGIC ----------------- */
-  if(yearCode==="9" && tail==="looptail" && dropout==="3mm" && seatTube==="relaxed" && ["F","G","H","X","J","K","L"].includes(monthCode)){
-    model="Pro / Large Pro";generation="2nd Generation Pro";productionWindow="June 1979 to April 1981";
-  }
-  else if(yearCode==="1" && tail==="looptail" && bb==="Euro" && dropout==="2mm" && seatTube==="laidback"){model="Pro Mini";}
-  else if(["1","2","3"].includes(yearCode) && tail==="looptail" && bb==="US" && dropout==="2mm" && seatTube==="laidback"){model="Pro Medium";}
-  else if(["1","2"].includes(yearCode) && tail==="looptail" && bb==="US" && dropout==="2mm" && seatTube==="nearvertical"){model="Pro Senior";generation="1st Generation";productionWindow="April 1981 to March 1982";}
-  else if(["2","3"].includes(yearCode) && tail==="looptail" && bb==="US" && dropout==="2mm" && seatTube==="nearvertical"){model="Pro Senior";generation="2nd Generation";productionWindow="April 1982 to March 1983";characteristics="Rear leverage change";}
-  else if(yearCode==="2" && tail==="looptail" && bb==="US" && dropout==="2mm" && seatTube==="nearvertical"){model="Harry Leary Turbo";generation="1st Generation";productionWindow="April 1982 to May 1982";}
-  else if(["2","3"].includes(yearCode) && tail==="looptail" && bb==="US" && dropout==="2mm" && seatTube==="nearvertical"){model="Harry Leary Turbo";generation="2nd Generation";productionWindow="April 1982 to September 1983";}
-  else if(yearCode==="4" && tail==="looptail"){model="Harry Leary Turbo";generation="3rd Generation";productionWindow="April 1984 to September 1984";}
-  else if(yearCode==="3" && tail==="non-looptail" && bb==="Euro"){model="Turbo Lite";characteristics="No diamond gusset";}
-  else if(["3","4"].includes(yearCode) && tail==="non-looptail" && bb==="US"){model="Formula One";}
-  else if(["0","1"].includes(yearCode) && tail==="non-looptail"){model="TK";characteristics="Large gusset";}
-  if(model==="Unknown Kanji Model"){notes="Selection does not match known model criteria. Check dropdown inputs.";}
-  result.innerHTML=`<div class="result-title">Serial Number Details</div>
-  <table class="result-table">
-  <tr><td>Manufacturer:</td><td>${manufacturer}</td></tr>
-  <tr><td>Year:</td><td>${year}</td></tr>
-  <tr><td>Month:</td><td>${month}</td></tr>
-  <tr><td>Build Number:</td><td>${build}</td></tr>
-  <tr><td>Model:</td><td>${model}</td></tr>
-  <tr><td>Generation:</td><td>${generation}</td></tr>
-  <tr><td>Production Window:</td><td>${productionWindow}</td></tr>
-  <tr><td>Frame Material:</td><td>${frameMaterial}</td></tr>
-  <tr><td>Bottom Bracket:</td><td>${bottomBracket}</td></tr>
-  <tr><td>Characteristics:</td><td>${characteristics}</td></tr>
-  <tr><td>Notes:</td><td>${notes}</td></tr>
-  </table>`; return;
+
+let yearCode = serial.charAt(0);
+let monthCode = serial.charAt(1);
+let build = serial.substring(2,6);
+
+let koizumiYears = {"9":"1979","0":"1980","1":"1981","2":"1982","3":"1983","4":"1984"};
+let koizumiMonths = {A:"January",B:"February",C:"March",D:"April",E:"May",F:"June",G:"July",H:"August",X:"September",J:"October",K:"November",L:"December"};
+
+let year = koizumiYears[yearCode];
+let month = koizumiMonths[monthCode];
+
+let manufacturer="Koizumi";
+let model="Unknown Kanji Model";
+let generation="";
+let productionWindow="";
+let frameMaterial="";
+let bottomBracket="";
+let characteristics="";
+let notes="";
+
+/* -----------------
+MODEL LOGIC
+-----------------*/
+// ✅ Large Pro
+if(yearCode==="9" && tail==="looptail" && dropout==="3mm" && seatTube==="relaxed"){
+  model="Pro / Large Pro";
+  generation="2nd Generation Pro";
+  productionWindow="June 1979 – April 1981";
+  characteristics="3mm rear dropout";
+}
+
+// ✅ Pro Mini
+else if(yearCode==="1" && tail==="looptail" && bb==="euro" && dropout==="2mm" && seatTube==="laidback"){
+  model="Pro Mini";
+}
+
+// ✅ Silver Streak
+else if(["1","2","3"].includes(yearCode) && tail==="looptail" && dropout==="3mm" && seatTube==="laidback"){
+  model="Silver Streak";
+  frameMaterial="Trimoly";
+  characteristics="3mm rear dropout";
+}
+
+// ✅ Pro Medium
+else if(["1","2","3"].includes(yearCode) && tail==="looptail" && dropout==="2mm" && seatTube==="laidback"){
+  model="Pro Medium";
+}
+
+// ✅ Pro Senior 1st Gen
+else if(["1","2"].includes(yearCode) && tail==="looptail" && bb==="us" && dropout==="2mm" && seatTube==="nearvertical"){
+  model="Pro Senior";
+  generation="1st Generation";
+  productionWindow="April 1981 – March 1982";
+}
+
+// ✅ Pro Senior 2nd Gen
+else if(["2","3"].includes(yearCode) && tail==="looptail" && bb==="us" && dropout==="2mm" && seatTube==="nearvertical"){
+  model="Pro Senior";
+  generation="2nd Generation";
+  productionWindow="April 1982 – March 1983";
+  characteristics="Rear leverage change";
+}
+
+// ✅ Harry Leary Turbo 1st Gen
+else if(yearCode==="2" && tail==="looptail" && bb==="us" && dropout==="2mm" && seatTube==="nearvertical"){
+  model="Harry Leary Turbo";
+  generation="1st Generation";
+  productionWindow="April 1982 – May 1982";
+}
+
+// ✅ Harry Leary Turbo 2nd Gen
+else if(["2","3"].includes(yearCode) && tail==="looptail" && bb==="us" && dropout==="2mm" && seatTube==="nearvertical"){
+  model="Harry Leary Turbo";
+  generation="2nd Generation";
+  productionWindow="April 1982 – September 1983";
+}
+
+// ✅ Harry Leary Turbo 3rd Gen
+else if(yearCode==="4" && tail==="looptail"){
+  model="Harry Leary Turbo";
+  generation="3rd Generation";
+  productionWindow="April 1984 – September 1984";
+}
+
+// ✅ Turbo Lite
+else if(yearCode==="3" && tail==="nonlooptail" && bb==="euro"){
+  model="Turbo Lite";
+  characteristics="No diamond gusset";
+}
+
+// ✅ Formula One
+else if(["3","4"].includes(yearCode) && tail==="nonlooptail" && bb==="us"){
+  model="Formula One";
+}
+
+// ✅ TK
+else if(["0","1"].includes(yearCode) && tail==="nonlooptail"){
+  model="TK";
+  characteristics="Large gusset";
+}
+
+/* Fallback note */
+if(model==="Unknown Kanji Model"){
+  notes="Selection does not match known model criteria. Check dropdown inputs.";
+}
+
+/* -----------------
+OUTPUT
+-----------------*/
+result.innerHTML =
+`<div class="result-title">Serial Number Details</div>
+<table class="result-table">
+<tr><td>Manufacturer:</td><td>${manufacturer}</td></tr>
+<tr><td>Year:</td><td>${year}</td></tr>
+<tr><td>Month:</td><td>${month}</td></tr>
+<tr><td>Build Number:</td><td>${build}</td></tr>
+<tr><td>Model:</td><td>${model}</td></tr>
+<tr><td>Generation:</td><td>${generation}</td></tr>
+<tr><td>Production Window:</td><td>${productionWindow}</td></tr>
+<tr><td>Frame Material:</td><td>${frameMaterial}</td></tr>
+<tr><td>Bottom Bracket:</td><td>${bb}</td></tr>
+<tr><td>Characteristics:</td><td>${characteristics}</td></tr>
+<tr><td>Notes:</td><td>${notes}</td></tr>
+</table>`;
+return;
 }
 
 /* -----------------
@@ -192,12 +444,26 @@ if(/^F[0-5]\d{6}$/.test(serial)){
   let yearCode = serial.charAt(1);
   let monthCode = serial.substring(2,4);
   let build = serial.substring(4,8);
+
   let fairYears={"0":"1980","1":"1981","2":"1982","3":"1983","4":"1984","5":"1985"};
   let year=fairYears[yearCode];
+
   let monthNum=parseInt(monthCode,10);
-  let monthName = (monthNum>=1 && monthNum<=12)?new Date(2000,monthNum-1,1).toLocaleString('default',{month:'long'}):"Unknown";
-  let manufacturer="Fairly",model="???",generation="???",productionWindow="???",frameMaterial="???",bottomBracket="???",characteristics="???",notes="";
-  result.innerHTML=`<div class="result-title">Serial Number Details</div>
+  let monthName = (monthNum>=1 && monthNum<=12) ? 
+      new Date(2000, monthNum-1, 1).toLocaleString('default',{month:'long'}) 
+      : "Unknown";
+
+  let manufacturer="Fairly";
+  let model="???";
+  let generation="???";
+  let productionWindow="???";
+  let frameMaterial="???";
+  let bottomBracket="???";
+  let characteristics="???";
+  let notes="";
+
+  result.innerHTML =
+  `<div class="result-title">Serial Number Details</div>
   <table class="result-table">
   <tr><td>Manufacturer:</td><td>${manufacturer}</td></tr>
   <tr><td>Year:</td><td>${year}</td></tr>
@@ -207,12 +473,16 @@ if(/^F[0-5]\d{6}$/.test(serial)){
   <tr><td>Generation:</td><td>${generation}</td></tr>
   <tr><td>Production Window:</td><td>${productionWindow}</td></tr>
   <tr><td>Frame Material:</td><td>${frameMaterial}</td></tr>
-  <tr><td>Bottom Bracket:</td><td>${bottomBracket}</td></tr>
-  <tr><td>Characteristics:</td><td>${characteristics}</td></tr>
-  <tr><td>Notes:</td><td>${notes}</td></tr>
-  </table>`; return;
+<tr><td>Bottom Bracket:</td><td>${bottomBracket}</td></tr>
+<tr><td>Characteristics:</td><td>${characteristics}</td></tr>
+<tr><td>Notes:</td><td>${notes}</td></tr>
+</table>`;
+return;
 }
 
+/* -----------------
+UNKNOWN SERIAL
+-----------------*/
 result.innerHTML="<p>Serial format not recognized.</p>";
 }
 </script>

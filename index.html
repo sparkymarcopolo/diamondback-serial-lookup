@@ -126,7 +126,7 @@ production date and model details.
 <strong>Important</strong>
 <ul>
 <li>Enter the serial exactly as stamped on the frame</li>
-<li><strong>No spaces</strong> are required (spaces will be automatically removed)</li>
+<li><strong>No spaces</strong> are required</li>
 <li>Frame Serials are typically located on the underside of the BB shell or inside rear dropout</li>
 </ul>
 
@@ -144,39 +144,35 @@ production date and model details.
 <input type="text" id="serialInput" placeholder="Enter Serial Number">
 
 <div style="margin-top:20px;text-align:left;">
-  <label for="tailSelect"><strong>Frame Tail Type (optional)</strong></label><br>
+  <label for="tailSelect"><strong>Frame Tail Type</strong></label><br>
   <select id="tailSelect">
-    <option value="">Unknown</option>
     <option value="looptail">Looptail</option>
-    <option value="nonlooptail">Non-Looptail</option>
+    <option value="sticktail">Sticktail</option>
   </select>
 </div>
 
 <div style="text-align:left;">
-  <label for="bbSelect"><strong>Bottom Bracket Type (optional)</strong></label><br>
+  <label for="bbSelect"><strong>Bottom Bracket Type</strong></label><br>
   <select id="bbSelect">
-    <option value="">Unknown</option>
-    <option value="us">US</option>
-    <option value="euro">Euro</option>
+    <option value="us">US BB</option>
+    <option value="euro">Euro BB</option>
   </select>
 </div>
 
 <div style="text-align:left;">
-  <label for="dropoutSelect"><strong>Rear Dropout Thickness (optional)</strong></label><br>
+  <label for="dropoutSelect"><strong>Rear Dropout Thickness</strong></label><br>
   <select id="dropoutSelect">
-    <option value="">Unknown</option>
     <option value="2mm">2mm</option>
     <option value="3mm">3mm</option>
   </select>
 </div>
 
 <div style="text-align:left;">
-  <label for="seatTubeSelect"><strong>Seat Tube Angle (optional)</strong></label><br>
+  <label for="seatTubeSelect"><strong>Seat Tube Geometry</strong></label><br>
   <select id="seatTubeSelect">
-    <option value="">Unknown</option>
-    <option value="laidback">Laid Back</option>
+    <option value="nearupright">Near Upright</option>
     <option value="relaxed">Relaxed</option>
-    <option value="nearvertical">Near Vertical</option>
+    <option value="laidback">Laid Back</option>
   </select>
 </div>
 
@@ -189,10 +185,19 @@ production date and model details.
 </div>
 
 <div style="text-align:left;">
-  <label for="leverageSelect"><strong>Dropout Welding Position (Leverage)</strong></label><br>
+  <label for="leverageSelect"><strong>Dropout Welding Position (Senior/HLT Only)</strong></label><br>
   <select id="leverageSelect">
-    <option value="standard">Standard (Matches Large Pro)</option>
+    <option value="standard">Standard (Non-Leverage)</option>
     <option value="update">Leverage Update (Welded Lower)</option>
+  </select>
+</div>
+
+<div style="text-align:left;">
+  <label for="gussetSelect"><strong>Gusset Style (Late '83/'84 Only)</strong></label><br>
+  <select id="gussetSelect">
+    <option value="large">Large Diamond</option>
+    <option value="small">Small Diamond</option>
+    <option value="none">No Gusset</option>
   </select>
 </div>
 
@@ -206,17 +211,15 @@ production date and model details.
 function lookupSerial(){
 
 let serial=document.getElementById("serialInput").value;
+serial = serial.toUpperCase().replace(/\s+/g,'');
 
-/* AUTO CLEAN USER INPUT */
-serial = serial.toUpperCase();
-serial = serial.replace(/\s+/g,'');
-
-let tail = document.getElementById("tailSelect")?.value || "";
-let bb = document.getElementById("bbSelect")?.value || "";
-let dropout = document.getElementById("dropoutSelect")?.value || "";
-let seatTube = document.getElementById("seatTubeSelect")?.value || "";
-let finish = document.getElementById("finishSelect")?.value || "chrome";
-let leverage = document.getElementById("leverageSelect")?.value || "standard";
+let tail = document.getElementById("tailSelect").value;
+let bb = document.getElementById("bbSelect").value;
+let dropout = document.getElementById("dropoutSelect").value;
+let seatTube = document.getElementById("seatTubeSelect").value;
+let finish = document.getElementById("finishSelect").value;
+let leverage = document.getElementById("leverageSelect").value;
+let gusset = document.getElementById("gussetSelect").value;
 
 let result=document.getElementById("result");
 result.innerHTML="";
@@ -228,48 +231,12 @@ if(/^[WJ][A-L][GHI]\d{3}$/.test(serial)){
   let monthCode = serial.charAt(1);
   let yearCode = serial.charAt(2);
   let build = serial.substring(3,6);
-
-  let months={
-    A:"January",B:"February",C:"March",D:"April",E:"May",F:"June",
-    G:"July",H:"August",I:"September",J:"October",K:"November",L:"December"
-  };
-
+  let months={A:"January",B:"February",C:"March",D:"April",E:"May",F:"June",G:"July",H:"August",I:"September",J:"October",K:"November",L:"December"};
   let years={ G:"1977", H:"1978", I:"1979" };
-
   let year = years[yearCode];
-  let model="MX";
-  let generation="";
-  let productionWindow="";
-  let frameMaterial="Chromoly";
-  let characteristics="Looptail, Large Diamond Gusset";
-  let notes="";
+  let generation = (year==="1977") ? "1st Generation MX" : "2nd Generation MX";
 
-  if(year==="1977"){
-    generation="1st Generation MX";
-    bb="Euro";
-    productionWindow="September – December 1977";
-    notes="First Diamond Back BMX model";
-  } else {
-    generation="2nd Generation MX";
-    bb="US";
-    productionWindow="January 1978 – February 1979";
-  }
-
-  result.innerHTML = `
-  <div class="result-title">Serial Number Details</div>
-  <table class="result-table">
-  <tr><td>Manufacturer:</td><td>Jere</td></tr>
-  <tr><td>Year:</td><td>${year}</td></tr>
-  <tr><td>Month:</td><td>${months[monthCode]}</td></tr>
-  <tr><td>Production Number:</td><td>${build}</td></tr>
-  <tr><td>Model:</td><td>${model}</td></tr>
-  <tr><td>Generation:</td><td>${generation}</td></tr>
-  <tr><td>Production Window:</td><td>${productionWindow}</td></tr>
-  <tr><td>Frame Material:</td><td>${frameMaterial}</td></tr>
-  <tr><td>Bottom Bracket:</td><td>${bb}</td></tr>
-  <tr><td>Characteristics:</td><td>${characteristics}</td></tr>
-  <tr><td>Notes:</td><td>${notes}</td></tr>
-  </table>`;
+  result.innerHTML = `<div class="result-title">Serial Details</div><table class="result-table"><tr><td>Manufacturer:</td><td>Jere</td></tr><tr><td>Year:</td><td>${year}</td></tr><tr><td>Month:</td><td>${months[monthCode]}</td></tr><tr><td>Model:</td><td>MX</td></tr><tr><td>Generation:</td><td>${generation}</td></tr></table>`;
   return;
 }
 
@@ -277,21 +244,7 @@ if(/^[WJ][A-L][GHI]\d{3}$/.test(serial)){
 KOIZUMI VM FORMAT
 -----------------*/
 if(/^VM\d{3,5}$/.test(serial)){
-  let build = serial.substring(2);
-  result.innerHTML = `
-  <div class="result-title">Serial Number Details</div>
-  <table class="result-table">
-  <tr><td>Manufacturer:</td><td>Koizumi</td></tr>
-  <tr><td>Year:</td><td>1979</td></tr>
-  <tr><td>Month:</td><td>March – June</td></tr>
-  <tr><td>Build Number:</td><td>${build}</td></tr>
-  <tr><td>Model:</td><td>Pro (Large Pro)</td></tr>
-  <tr><td>Generation:</td><td>1st Generation Pro</td></tr>
-  <tr><td>Production Window:</td><td>March – June 1979</td></tr>
-  <tr><td>Frame Material:</td><td>Chromoly</td></tr>
-  <tr><td>Bottom Bracket:</td><td>US</td></tr>
-  <tr><td>Characteristics:</td><td>Early versions with 2mm dropouts and Dual Dropout Forks</td></tr>
-  </table>`;
+  result.innerHTML = `<div class="result-title">Serial Details</div><table class="result-table"><tr><td>Manufacturer:</td><td>Koizumi</td></tr><tr><td>Year:</td><td>1979</td></tr><tr><td>Month:</td><td>March – June</td></tr><tr><td>Model:</td><td>Pro (Large Pro)</td></tr><tr><td>Generation:</td><td>1st Generation Pro</td></tr></table>`;
   return;
 }
 
@@ -299,129 +252,89 @@ if(/^VM\d{3,5}$/.test(serial)){
 KOIZUMI KANJI FORMAT
 -----------------*/
 if(/^\d[A-Z]\d{4}[A-Z]?$/.test(serial)){
-
-let yearCode = serial.charAt(0);
-let monthCode = serial.charAt(1);
-let build = serial.substring(2,6);
-
-let koizumiYears = {"9":"1979","0":"1980","1":"1981","2":"1982","3":"1983","4":"1984"};
-let koizumiMonths = {A:"January",B:"February",C:"March",D:"April",E:"May",F:"June",G:"July",H:"August",X:"September",J:"October",K:"November",L:"December"};
-
-let year = koizumiYears[yearCode];
-let month = koizumiMonths[monthCode];
-
-let manufacturer="Koizumi";
-let model="Unknown Kanji Model";
-let generation="";
-let productionWindow="";
-let frameMaterial="";
-let characteristics="";
-let notes="";
-
-const monthIndex = {A:1,B:2,C:3,D:4,E:5,F:6,G:7,H:8,X:9,J:10,K:11,L:12};
-let m = monthIndex[monthCode];
-let y = Number(year);
-
-/* -----------------
-MODEL LOGIC (PRIORITIZED)
------------------*/
-
-// 1. LARGE PRO
-if (["9","0","1"].includes(yearCode) && tail==="looptail" && dropout==="3mm" && seatTube==="relaxed") {
-  if ((y === 1979 && m >= 6) || (y === 1980) || (y === 1981 && m <= 6)) {
-    model="Pro / Large Pro";
-    generation="2nd Generation Pro";
-    productionWindow="June 1979 – June 1981";
-    characteristics="3mm rear dropout";
-  }
-}
-
-// 2. TK
-else if (yearCode === "1" && tail === "looptail" && dropout === "3mm" && seatTube === "relaxed" && m >= 7) {
-    model = "TK (Team Koizumi)";
-    productionWindow = "July 1981 Onwards";
-    characteristics = "Post-June 1981 3mm/Relaxed transition model.";
-}
-
-// 3. PRO MINI
-else if (yearCode==="1" && tail==="looptail" && bb==="euro" && dropout==="2mm" && seatTube==="laidback") {
-  model="Pro Mini";
-}
-
-// 4. SILVER STREAK
-else if (["1","2","3"].includes(yearCode) && tail==="looptail" && dropout==="3mm" && (seatTube==="laidback" || seatTube==="nearvertical")) {
-  model="Silver Streak";
-  frameMaterial="Trimoly";
-  characteristics="3mm rear dropout";
-}
-
-// 5. PRO MEDIUM
-else if (["1","2","3"].includes(yearCode) && tail==="looptail" && dropout==="2mm" && seatTube==="laidback") {
-  model="Pro Medium";
-}
-
-// 6. PRO SENIOR / HARRY LEARY TURBO (PRECISION LOGIC)
-else if (["1","2","3"].includes(yearCode) && tail==="looptail" && bb==="us" && dropout==="2mm" && seatTube==="nearvertical") {
+  let yearCode = serial.charAt(0);
+  let monthCode = serial.charAt(1);
+  let koizumiYears = {"9":"1979","0":"1980","1":"1981","2":"1982","3":"1983","4":"1984"};
+  let koizumiMonths = {A:"January",B:"February",C:"March",D:"April",E:"May",F:"June",G:"July",H:"August",X:"September",J:"October",K:"November",L:"December"};
   
-    // Determine Model Name
-    if (finish === "smoke") {
-        model = "Harry Leary Turbo (HLT)";
-    } else if (y === 1981 && m === 4 && leverage === "standard") {
-        model = "Pro Senior";
-        notes = "April 1981: Exclusively Pro Senior production.";
-    } else {
-        model = "Pro Senior / HLT";
-        notes = "Physically identical frames; model depends on original finish/decals.";
+  let year = koizumiYears[yearCode];
+  let month = koizumiMonths[monthCode];
+  const mIndex = {A:1,B:2,C:3,D:4,E:5,F:6,G:7,H:8,X:9,J:10,K:11,L:12};
+  let m = mIndex[monthCode];
+  let y = Number(year);
+
+  let model="Unknown Kanji Model";
+  let generation="";
+  let characteristics="";
+
+  // 1. PRO (LARGE PRO) - June '79 to Oct '81
+  if (dropout === "3mm" && tail === "looptail" && seatTube === "relaxed") {
+    if ((y === 1979 && m >= 6) || y === 1980 || (y === 1981 && m <= 10)) {
+        model = "Pro (aka Large Pro)";
+        generation = "2nd Generation";
     }
+  }
 
-    // Determine Generation based on Leverage Update
-    if (leverage === "update") {
-        generation = "2nd Generation (Leverage Update)";
-        productionWindow = "June 1982 – September 1983";
-    } else {
-        generation = "1st Generation";
-        productionWindow = "April 1981 – May 1982";
-    }
-}
+  // 2. TK - January '80 to October '80
+  if (y === 1980 && m <= 10 && tail === "sticktail" && dropout === "3mm" && seatTube === "relaxed") {
+    model = "TK";
+    characteristics = "Large Diamond Gusset";
+  }
 
-// 7. HARRY LEARY TURBO 3rd GEN
-else if (yearCode==="4" && tail==="looptail") {
-  model="Harry Leary Turbo";
-  generation="3rd Generation";
-  productionWindow="April 1984 – September 1984";
-}
+  // 3. PRO MINI - April '81 to August '81
+  if (y === 1981 && m >= 4 && m <= 8 && bb === "euro" && seatTube === "laidback" && dropout === "2mm") {
+    model = "Pro Mini";
+  }
 
-// 8. TURBO LITE
-else if (yearCode==="3" && tail==="nonlooptail" && bb==="euro") {
-  model="Turbo Lite";
-  characteristics="No diamond gusset";
-}
+  // 4. SILVER STREAK - Sept '81 to Sept '83
+  if (dropout === "3mm" && tail === "looptail" && seatTube === "laidback") {
+      if ((y === 1981 && m >= 9) || y === 1982 || (y === 1983 && m <= 9)) {
+          model = "Silver Streak";
+      }
+  }
 
-// 9. FORMULA ONE
-else if (["3","4"].includes(yearCode) && tail==="nonlooptail" && bb==="us") {
-  model="Formula One";
-}
+  // 5. PRO SENIOR / HLT GEN 1 & 2
+  if (dropout === "2mm" && tail === "looptail" && seatTube === "nearupright") {
+      let baseModel = (finish === "smoke") ? "Harry Leary Turbo (HLT)" : "Pro Senior";
+      
+      // Gen 1: April '81 - May '82
+      if ((y === 1981 && m >= 4) || (y === 1982 && m <= 5)) {
+          model = `${baseModel} (Gen 1)`;
+          generation = "1st Generation (Non-Leverage)";
+      }
+      // Gen 2: April '82 - Sept '83
+      else if (((y === 1982 && m >= 4) || (y === 1983 && m <= 9)) && leverage === "update") {
+          model = `${baseModel} (Gen 2)`;
+          generation = "2nd Generation (Leverage Updated)";
+      }
+  }
 
-if(model==="Unknown Kanji Model"){
-  notes="Selection does not match known model criteria. Check dropdown inputs.";
-}
+  // 6. FORMULA ONE & TURBO-LITE - Sept '83 to April '84
+  if (tail === "sticktail") {
+      if ((y === 1983 && m >= 9) || (y === 1984 && m <= 4)) {
+          if (bb === "us" && seatTube === "relaxed" && gusset === "small") {
+              model = "Formula One";
+          } else if (bb === "euro" && seatTube === "laidback" && gusset === "none") {
+              model = "Turbo-Lite";
+          }
+      }
+  }
 
-result.innerHTML = `
-<div class="result-title">Serial Number Details</div>
-<table class="result-table">
-<tr><td>Manufacturer:</td><td>${manufacturer}</td></tr>
-<tr><td>Year:</td><td>${year}</td></tr>
-<tr><td>Month:</td><td>${month}</td></tr>
-<tr><td>Build Number:</td><td>${build}</td></tr>
-<tr><td>Model:</td><td>${model}</td></tr>
-<tr><td>Generation:</td><td>${generation}</td></tr>
-<tr><td>Production Window:</td><td>${productionWindow}</td></tr>
-<tr><td>Frame Material:</td><td>${frameMaterial}</td></tr>
-<tr><td>Bottom Bracket:</td><td>${bb.toUpperCase()}</td></tr>
-<tr><td>Characteristics:</td><td>${characteristics}</td></tr>
-<tr><td>Notes:</td><td>${notes}</td></tr>
-</table>`;
-return;
+  // 7. HLT GEN 3 - April '84 to Sept '84
+  if (y === 1984 && m >= 4 && m <= 9 && tail === "looptail" && gusset === "small" && seatTube === "nearupright") {
+      model = "Harry Leary Turbo (Gen 3)";
+  }
+
+  result.innerHTML = `
+  <div class="result-title">Serial Details</div>
+  <table class="result-table">
+  <tr><td>Manufacturer:</td><td>Koizumi</td></tr>
+  <tr><td>Date:</td><td>${month} ${year}</td></tr>
+  <tr><td>Model:</td><td>${model}</td></tr>
+  <tr><td>Generation:</td><td>${generation}</td></tr>
+  <tr><td>Characteristics:</td><td>${characteristics}</td></tr>
+  </table>`;
+  return;
 }
 
 /* -----------------
@@ -429,20 +342,8 @@ FAIRLY FORMAT
 -----------------*/
 if(/^F[0-5]\d{6}$/.test(serial)){
   let yearCode = serial.charAt(1);
-  let monthCode = serial.substring(2,4);
   let fairYears={"0":"1980","1":"1981","2":"1982","3":"1983","4":"1984","5":"1985"};
-  let year=fairYears[yearCode];
-  let monthNum=parseInt(monthCode,10);
-  let monthName = (monthNum>=1 && monthNum<=12) ? new Date(2000, monthNum-1, 1).toLocaleString('default',{month:'long'}) : "Unknown";
-
-  result.innerHTML = `
-  <div class="result-title">Serial Number Details</div>
-  <table class="result-table">
-  <tr><td>Manufacturer:</td><td>Fairly</td></tr>
-  <tr><td>Year:</td><td>${year}</td></tr>
-  <tr><td>Month:</td><td>${monthName}</td></tr>
-  <tr><td>Model:</td><td>Pending</td></tr>
-  </table>`;
+  result.innerHTML = `<div class="result-title">Serial Details</div><table class="result-table"><tr><td>Manufacturer:</td><td>Fairly</td></tr><tr><td>Year:</td><td>${fairYears[yearCode]}</td></tr></table>`;
   return;
 }
 

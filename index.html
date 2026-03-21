@@ -180,6 +180,22 @@ production date and model details.
   </select>
 </div>
 
+<div style="text-align:left;">
+  <label for="finishSelect"><strong>Frame Finish (For Senior/HLT ID)</strong></label><br>
+  <select id="finishSelect">
+    <option value="chrome">Plain Chrome / Other</option>
+    <option value="smoke">Smoked Chrome (Electric Light)</option>
+  </select>
+</div>
+
+<div style="text-align:left;">
+  <label for="leverageSelect"><strong>Dropout Welding Position (Leverage)</strong></label><br>
+  <select id="leverageSelect">
+    <option value="standard">Standard (Matches Large Pro)</option>
+    <option value="update">Leverage Update (Welded Lower)</option>
+  </select>
+</div>
+
 <button onclick="lookupSerial()">Lookup</button>
 
 <div id="result"></div>
@@ -199,6 +215,8 @@ let tail = document.getElementById("tailSelect")?.value || "";
 let bb = document.getElementById("bbSelect")?.value || "";
 let dropout = document.getElementById("dropoutSelect")?.value || "";
 let seatTube = document.getElementById("seatTubeSelect")?.value || "";
+let finish = document.getElementById("finishSelect")?.value || "chrome";
+let leverage = document.getElementById("leverageSelect")?.value || "standard";
 
 let result=document.getElementById("result");
 result.innerHTML="";
@@ -319,12 +337,10 @@ if (["9","0","1"].includes(yearCode) && tail==="looptail" && dropout==="3mm" && 
 }
 
 // 2. TK
-else if (yearCode === "0" && tail === "nonlooptail" && dropout === "3mm" && bb === "us") {
-  if (y === 1980 && m >= 2 && m <= 10) {
-    model = "TK";
-    productionWindow = "February 1980 – October 1980";
-    characteristics = "Non-looptail, 3mm rear dropout, large gusset";
-  }
+else if (yearCode === "1" && tail === "looptail" && dropout === "3mm" && seatTube === "relaxed" && m >= 7) {
+    model = "TK (Team Koizumi)";
+    productionWindow = "July 1981 Onwards";
+    characteristics = "Post-June 1981 3mm/Relaxed transition model.";
 }
 
 // 3. PRO MINI
@@ -333,7 +349,7 @@ else if (yearCode==="1" && tail==="looptail" && bb==="euro" && dropout==="2mm" &
 }
 
 // 4. SILVER STREAK
-else if (["1","2","3"].includes(yearCode) && tail==="looptail" && dropout==="3mm" && seatTube==="laidback") {
+else if (["1","2","3"].includes(yearCode) && tail==="looptail" && dropout==="3mm" && (seatTube==="laidback" || seatTube==="nearvertical")) {
   model="Silver Streak";
   frameMaterial="Trimoly";
   characteristics="3mm rear dropout";
@@ -344,15 +360,28 @@ else if (["1","2","3"].includes(yearCode) && tail==="looptail" && dropout==="2mm
   model="Pro Medium";
 }
 
-// 6. PRO SENIOR / HARRY LEARY TURBO 1st/2nd Gen
+// 6. PRO SENIOR / HARRY LEARY TURBO (PRECISION LOGIC)
 else if (["1","2","3"].includes(yearCode) && tail==="looptail" && bb==="us" && dropout==="2mm" && seatTube==="nearvertical") {
-  model="Pro Senior / Harry Leary Turbo";
-  characteristics="Physically identical frames; model determined by decals.";
-  if (yearCode === "1" || (yearCode === "2" && m <= 3)) {
-    generation = "Pro Senior 1st Gen";
-  } else {
-    generation = "Pro Senior 2nd Gen / HLT 1st-2nd Gen";
-  }
+  
+    // Determine Model Name
+    if (finish === "smoke") {
+        model = "Harry Leary Turbo (HLT)";
+    } else if (y === 1981 && m === 4 && leverage === "standard") {
+        model = "Pro Senior";
+        notes = "April 1981: Exclusively Pro Senior production.";
+    } else {
+        model = "Pro Senior / HLT";
+        notes = "Physically identical frames; model depends on original finish/decals.";
+    }
+
+    // Determine Generation based on Leverage Update
+    if (leverage === "update") {
+        generation = "2nd Generation (Leverage Update)";
+        productionWindow = "June 1982 – September 1983";
+    } else {
+        generation = "1st Generation";
+        productionWindow = "April 1981 – May 1982";
+    }
 }
 
 // 7. HARRY LEARY TURBO 3rd GEN

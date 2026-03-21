@@ -367,6 +367,30 @@ if(
     // Let it fall through to other models or Unknown
   }
 }
+
+  // ✅ TK (STRICT DATE WINDOW)
+else if(
+  yearCode === "0" && 
+  tail === "nonlooptail" && 
+  dropout === "3mm" &&
+  bb === "us"
+){
+  const monthIndex = {
+    A:1,B:2,C:3,D:4,E:5,F:6,G:7,H:8,X:9,J:10,K:11,L:12
+  };
+
+  let y = Number(year);
+  let m = monthIndex[monthCode];
+
+  let inWindow = (y === 1980 && m >= 2 && m <= 10);
+
+  if(inWindow){
+    model = "TK";
+    productionWindow = "February 1980 – October 1980";
+    characteristics = "Non-looptail, 3mm rear dropout, large gusset";
+    notes = ""; 
+  }
+}
   
 // ✅ Pro Mini
 else if(yearCode==="1" && tail==="looptail" && bb==="euro" && dropout==="2mm" && seatTube==="laidback"){
@@ -430,30 +454,6 @@ else if(yearCode==="3" && tail==="nonlooptail" && bb==="euro"){
 // ✅ Formula One
 else if(["3","4"].includes(yearCode) && tail==="nonlooptail" && bb==="us"){
   model="Formula One";
-}
-
-// ✅ TK (STRICT DATE WINDOW)
-if(
-  yearCode === "0" &&
-  tail === "non-looptail" &&
-  dropout === "3mm"
-){
-
-  const monthIndex = {
-    A:1,B:2,C:3,D:4,E:5,F:6,G:7,H:8,X:9,J:10,K:11,L:12
-  };
-
-  let y = Number(year);
-  let m = monthIndex[monthCode];
-
-  let inWindow =
-    (y === 1980 && m >= 2 && m <= 10);
-
-  if(inWindow){
-    model = "TK";
-    productionWindow = "February 1980 – October 1980";
-    characteristics = "Non-looptail, 3mm rear dropout, large gusset";
-  }
 }
 
 /* Fallback note */

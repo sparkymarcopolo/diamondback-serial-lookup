@@ -333,7 +333,7 @@ let notes="";
 /* -----------------
 MODEL LOGIC
 -----------------*/
-// ✅ LARGE PRO (FINAL FIXED VERSION)
+// ✅ LARGE PRO (STRICT + CORRECT)
 if(
   ["9","0","1"].includes(yearCode) &&
   tail==="looptail" &&
@@ -345,7 +345,7 @@ if(
     A:1,B:2,C:3,D:4,E:5,F:6,G:7,H:8,X:9,J:10,K:11,L:12
   };
 
-  let y = Number(year);   // force number
+  let y = Number(year);
   let m = monthIndex[monthCode];
 
   let inWindow =
@@ -358,10 +358,12 @@ if(
     generation="2nd Generation Pro";
     productionWindow="June 1979 – June 1981";
     characteristics="3mm rear dropout";
-  } else {
-    // 🔥 IMPORTANT: still assign model
-    model="Pro / Large Pro";
-    notes="Matches Large Pro geometry but outside production window.";
+  }
+
+  // 🚫 DO NOT assign model if outside window
+  else{
+    // IMPORTANT: do nothing here
+    // Let it fall through to other models or Unknown
   }
 }
 

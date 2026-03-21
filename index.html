@@ -3,118 +3,107 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MX Serial Decoder</title>
+    <title>Equipment Serial Decoder</title>
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f0f2f5;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-        .decoder-card {
-            background: white;
-            padding: 2rem;
-            border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            width: 100%;
-            max-width: 400px;
-        }
-        h2 { color: #1a73e8; margin-top: 0; }
-        input {
-            width: 100%;
-            padding: 12px;
-            margin: 10px 0;
-            border: 2px solid #ddd;
-            border-radius: 6px;
-            box-sizing: border-box;
-            font-size: 16px;
-            text-transform: uppercase;
-        }
-        button {
-            width: 100%;
-            padding: 12px;
-            background-color: #1a73e8;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: bold;
-        }
-        button:hover { background-color: #1557b0; }
-        
-        #result { margin-top: 20px; }
-        .result-title {
-            font-weight: bold;
-            margin-bottom: 10px;
-            color: #333;
-            border-bottom: 2px solid #1a73e8;
-            display: inline-block;
-        }
-        .result-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        .result-table td {
-            padding: 8px 0;
-            border-bottom: 1px solid #eee;
-            color: #555;
-        }
-        .result-table td:first-child {
-            font-weight: bold;
-            width: 40%;
-        }
-        .error { color: #d93025; font-size: 14px; }
+        /* --- UI STYLING SECTION --- */
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: #eef2f3; display: flex; justify-content: center; padding: 40px; }
+        .decoder-card { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 8px 30px rgba(0,0,0,0.1); width: 100%; max-width: 450px; }
+        h2 { color: #2c3e50; text-align: center; margin-top: 0; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        .input-group { margin: 20px 0; }
+        input { width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 8px; font-size: 16px; box-sizing: border-box; transition: border-color 0.3s; }
+        input:focus { border-color: #3498db; outline: none; }
+        button { width: 100%; padding: 12px; background: #3498db; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; transition: background 0.3s; }
+        button:hover { background: #2980b9; }
+
+        /* --- RESULT TABLE STYLING --- */
+        #result { margin-top: 25px; min-height: 50px; }
+        .result-title { font-weight: bold; color: #2c3e50; margin-bottom: 8px; font-size: 1.1em; border-left: 4px solid #3498db; padding-left: 10px; }
+        .result-table { width: 100%; border-collapse: collapse; }
+        .result-table td { padding: 10px 5px; border-bottom: 1px solid #f0f0f0; font-size: 14px; }
+        .result-table td:first-child { font-weight: 600; color: #7f8c8d; width: 40%; }
+        .error { color: #e74c3c; text-align: center; font-weight: 500; padding: 10px; background: #fdf2f2; border-radius: 6px; }
     </style>
 </head>
 <body>
 
 <div class="decoder-card">
-    <h2>MX Decoder</h2>
-    <p>Enter your serial number (e.g., WAI123):</p>
-    <input type="text" id="serialInput" placeholder="e.g. WAI123" maxlength="6">
-    <button onclick="decodeSerial()">Decode Serial</button>
+    <h2>Serial Decoder</h2>
     
-    <div id="result"></div>
+    <div class="input-group">
+        <input type="text" id="serialInput" placeholder="Enter Serial Number..." spellcheck="false">
+    </div>
+    
+    <button onclick="runDecoder()">Decode Information</button>
+
+    <div id="result">
+        </div>
 </div>
 
 <script>
-function decodeSerial() {
-    const serial = document.getElementById('serialInput').value.toUpperCase();
+/**
+ * MAIN DECODER CONTROLLER
+ */
+function runDecoder() {
+    const serial = document.getElementById('serialInput').value.trim().toUpperCase();
     const result = document.getElementById('result');
     
-    // Your provided logic starts here
-    if(/^[WJ][A-L][GHI]\d{3}$/.test(serial)){
+    // Clear previous result
+    result.innerHTML = "";
+
+    if (!serial) {
+        result.innerHTML = '<div class="error">Please enter a serial number.</div>';
+        return;
+    }
+
+    // ==========================================
+    // SECTION 1: FABRICATIONS BY JERE (MX)
+    // ==========================================
+    if (/^[WJ][A-L][GHI]\d{3}$/.test(serial)) {
         let monthCode = serial.charAt(1);
         let yearCode = serial.charAt(2);
-        let build = serial.substring(3,6);
+        let build = serial.substring(3, 6);
         
         let months = {
-            A:"January", B:"February", C:"March", D:"April", 
-            E:"May", F:"June", G:"July", H:"August", 
-            I:"September", J:"October", K:"November", L:"December"
+            A:"January", B:"February", C:"March", D:"April", E:"May", F:"June", 
+            G:"July", H:"August", I:"September", J:"October", K:"November", L:"December"
         };
+        let years = { G: "1977", H: "1978", I: "1979" };
         
-        let years = { G:"1977", H:"1978", I:"1979" };
         let year = years[yearCode];
         let generation = (year === "1977") ? "1st Generation MX" : "2nd Generation MX";
 
         result.innerHTML = `
-            <div class="result-title">Serial Details</div>
+            <div class="result-title">Fabrications By Jere</div>
             <table class="result-table">
                 <tr><td>Manufacturer:</td><td>Jere</td></tr>
                 <tr><td>Year:</td><td>${year}</td></tr>
                 <tr><td>Month:</td><td>${months[monthCode]}</td></tr>
                 <tr><td>Model:</td><td>MX</td></tr>
                 <tr><td>Generation:</td><td>${generation}</td></tr>
-                <tr><td>Build No:</td><td>${build}</td></tr>
+                <tr><td>Build Seq:</td><td>#${build}</td></tr>
             </table>`;
-    } else {
-        result.innerHTML = '<p class="error">Invalid Serial Format. Expected: [W/J][A-L][G-I][000]</p>';
+        return; 
     }
+
+    // ==========================================
+    // SECTION 2: [AWAITING NEXT BRAND]
+    // ==========================================
+    /* if (SERIAL_PATTERN_2.test(serial)) {
+        // logic here
+        return;
+    } 
+    */
+
+    // ==========================================
+    // SECTION 3: [AWAITING NEXT BRAND]
+    // ==========================================
+
+    // ==========================================
+    // SECTION 4: [AWAITING NEXT BRAND]
+    // ==========================================
+
+    // IF NO PATTERN MATCHES
+    result.innerHTML = '<div class="error">Serial format not recognized for any known brand.</div>';
 }
 </script>
 

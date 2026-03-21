@@ -125,8 +125,8 @@ production date and model details.
 <div class="instructions">
 <strong>Important</strong>
 <ul>
-<li>Enter the serial exactly as stamped on the frame</li>
-<li><strong>No spaces</strong> are required</li>
+<li>Enter the serial exactly as stamped on the frame (e.g., 1F1234)</li>
+<li>Spaces are automatically removed</li>
 <li>Frame Serials are typically located on the underside of the BB shell or inside rear dropout</li>
 </ul>
 
@@ -185,7 +185,7 @@ production date and model details.
 </div>
 
 <div style="text-align:left;">
-  <label for="leverageSelect"><strong>Dropout Welding Position (Senior/HLT Only)</strong></label><br>
+  <label for="leverageSelect"><strong>Dropout Style (Senior/HLT Only)</strong></label><br>
   <select id="leverageSelect">
     <option value="standard">Standard (Non-Leverage)</option>
     <option value="update">Leverage Update (Welded Lower)</option>
@@ -267,7 +267,7 @@ if(/^\d[A-Z]\d{4}[A-Z]?$/.test(serial)){
   let generation="";
   let characteristics="";
 
-  // 1. PRO (LARGE PRO) - June '79 to Oct '81
+  // 1. PRO (LARGE PRO)
   if (dropout === "3mm" && tail === "looptail" && seatTube === "relaxed") {
     if ((y === 1979 && m >= 6) || y === 1980 || (y === 1981 && m <= 10)) {
         model = "Pro (aka Large Pro)";
@@ -275,41 +275,44 @@ if(/^\d[A-Z]\d{4}[A-Z]?$/.test(serial)){
     }
   }
 
-  // 2. TK - January '80 to October '80
+  // 2. TK
   if (y === 1980 && m <= 10 && tail === "sticktail" && dropout === "3mm" && seatTube === "relaxed") {
     model = "TK";
     characteristics = "Large Diamond Gusset";
   }
 
-  // 3. PRO MINI - April '81 to August '81
+  // 3. PRO MINI
   if (y === 1981 && m >= 4 && m <= 8 && bb === "euro" && seatTube === "laidback" && dropout === "2mm") {
     model = "Pro Mini";
   }
 
-  // 4. SILVER STREAK - Sept '81 to Sept '83
+  // 4. SILVER STREAK (3mm version)
   if (dropout === "3mm" && tail === "looptail" && seatTube === "laidback") {
       if ((y === 1981 && m >= 9) || y === 1982 || (y === 1983 && m <= 9)) {
           model = "Silver Streak";
       }
   }
 
-  // 5. PRO SENIOR / HLT GEN 1 & 2
+  // 5. PRO MEDIUM (2mm version)
+  if (dropout === "2mm" && tail === "looptail" && seatTube === "laidback" && bb === "us") {
+      if (y >= 1981 && y <= 1983) {
+          model = "Pro Medium";
+      }
+  }
+
+  // 6. PRO SENIOR / HLT GEN 1 & 2
   if (dropout === "2mm" && tail === "looptail" && seatTube === "nearupright") {
       let baseModel = (finish === "smoke") ? "Harry Leary Turbo (HLT)" : "Pro Senior";
-      
-      // Gen 1: April '81 - May '82
       if ((y === 1981 && m >= 4) || (y === 1982 && m <= 5)) {
           model = `${baseModel} (Gen 1)`;
           generation = "1st Generation (Non-Leverage)";
-      }
-      // Gen 2: April '82 - Sept '83
-      else if (((y === 1982 && m >= 4) || (y === 1983 && m <= 9)) && leverage === "update") {
+      } else if (((y === 1982 && m >= 4) || (y === 1983 && m <= 9)) && leverage === "update") {
           model = `${baseModel} (Gen 2)`;
           generation = "2nd Generation (Leverage Updated)";
       }
   }
 
-  // 6. FORMULA ONE & TURBO-LITE - Sept '83 to April '84
+  // 7. FORMULA ONE & TURBO-LITE
   if (tail === "sticktail") {
       if ((y === 1983 && m >= 9) || (y === 1984 && m <= 4)) {
           if (bb === "us" && seatTube === "relaxed" && gusset === "small") {
@@ -320,7 +323,7 @@ if(/^\d[A-Z]\d{4}[A-Z]?$/.test(serial)){
       }
   }
 
-  // 7. HLT GEN 3 - April '84 to Sept '84
+  // 8. HLT GEN 3
   if (y === 1984 && m >= 4 && m <= 9 && tail === "looptail" && gusset === "small" && seatTube === "nearupright") {
       model = "Harry Leary Turbo (Gen 3)";
   }

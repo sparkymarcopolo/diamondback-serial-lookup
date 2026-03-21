@@ -433,10 +433,10 @@ else if(["3","4"].includes(yearCode) && tail==="nonlooptail" && bb==="us"){
 
 // ✅ TK (STRICT DATE WINDOW)
 if(
+  model === "Unknown Kanji Model" &&   // 🔥 ADD THIS LINE
   yearCode === "0" &&
   tail === "non-looptail" &&
-  dropout === "3mm" &&
-  seatTube==="relaxed"
+  dropout === "3mm"
 ){
 
   const monthIndex = {
@@ -446,8 +446,7 @@ if(
   let y = Number(year);
   let m = monthIndex[monthCode];
 
-  let inWindow =
-    (y === 1980 && m >= 2 && m <= 10);
+  let inWindow = (y === 1980 && m >= 2 && m <= 10);
 
   if(inWindow){
     model = "TK";

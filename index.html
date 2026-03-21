@@ -306,182 +306,167 @@ if(/^VM\d{3,5}$/.test(serial)){
   return;
 }
 
-/* -----------------
-KOIZUMI KANJI FORMAT
------------------*/
+<!-- KOIZUMI KANJI FORMAT -->
+<script>
 if(/^\d[A-Z]\d{4}[A-Z]?$/.test(serial)){
 
-let yearCode = serial.charAt(0);
-let monthCode = serial.charAt(1);
-let build = serial.substring(2,6);
+  let yearCode = serial.charAt(0);
+  let monthCode = serial.charAt(1);
+  let build = serial.substring(2,6);
 
-let koizumiYears = {"9":"1979","0":"1980","1":"1981","2":"1982","3":"1983","4":"1984"};
-let koizumiMonths = {A:"January",B:"February",C:"March",D:"April",E:"May",F:"June",G:"July",H:"August",X:"September",J:"October",K:"November",L:"December"};
+  let koizumiYears = {"9":"1979","0":"1980","1":"1981","2":"1982","3":"1983","4":"1984"};
+  let koizumiMonths = {A:"January",B:"February",C:"March",D:"April",E:"May",F:"June",G:"July",H:"August",X:"September",J:"October",K:"November",L:"December"};
 
-let year = koizumiYears[yearCode];
-let month = koizumiMonths[monthCode];
+  let year = koizumiYears[yearCode];
+  let month = koizumiMonths[monthCode];
 
-let manufacturer="Koizumi";
-let model="Unknown Kanji Model";
-let generation="";
-let productionWindow="";
-let frameMaterial="";
-let bottomBracket="";
-let characteristics="";
-let notes="";
+  let manufacturer="Koizumi";
+  let model="Unknown Kanji Model";
+  let generation="";
+  let productionWindow="";
+  let frameMaterial="";
+  let bottomBracket="";
+  let characteristics="";
+  let notes="";
 
-/* -----------------
-MODEL LOGIC
------------------*/
-// ✅ LARGE PRO (STRICT + CORRECT)
-if(
-  ["9","0","1"].includes(yearCode) &&
-  tail==="looptail" &&
-  dropout==="3mm" &&
-  seatTube==="relaxed"
-){
+  // Normalize dropdowns to lowercase
+  tail = tail.toLowerCase();
+  bb = bb.toLowerCase();
+  dropout = dropout.toLowerCase();
+  seatTube = seatTube.toLowerCase();
 
-  const monthIndex = {
-    A:1,B:2,C:3,D:4,E:5,F:6,G:7,H:8,X:9,J:10,K:11,L:12
-  };
-
+  const monthIndex = {A:1,B:2,C:3,D:4,E:5,F:6,G:7,H:8,X:9,J:10,K:11,L:12};
   let y = Number(year);
   let m = monthIndex[monthCode];
 
-  let inWindow =
-    (y === 1979 && m >= 6) ||
-    (y === 1980) ||
-    (y === 1981 && m <= 6);
+  /* -----------------
+    MODEL LOGIC
+  -----------------*/
 
-  if(inWindow){
-    model="Pro / Large Pro";
-    generation="2nd Generation Pro";
-    productionWindow="June 1979 – June 1981";
+  // ✅ LARGE PRO (STRICT + CORRECT)
+  if(["9","0","1"].includes(yearCode) &&
+     tail==="looptail" &&
+     dropout==="3mm" &&
+     seatTube==="relaxed"){
+
+    let inWindow =
+      (y === 1979 && m >= 6) ||
+      (y === 1980) ||
+      (y === 1981 && m <= 6);
+
+    if(inWindow){
+      model="Pro / Large Pro";
+      generation="2nd Generation Pro";
+      productionWindow="June 1979 – June 1981";
+      characteristics="3mm rear dropout";
+    }
+  }
+
+  // ✅ TK (STRICT DATE WINDOW)
+  else if(yearCode==="0" &&
+          tail==="non-looptail" &&
+          dropout==="3mm"){
+
+    let inWindow = (y === 1980 && m >= 2 && m <= 10);
+
+    if(inWindow){
+      model="TK";
+      productionWindow="February 1980 – October 1980";
+      characteristics="Non-looptail, 3mm rear dropout, large gusset";
+    }
+  }
+
+  // ✅ Pro Mini
+  else if(yearCode==="1" && tail==="looptail" && bb==="euro" && dropout==="2mm" && seatTube==="laidback"){
+    model="Pro Mini";
+  }
+
+  // ✅ Silver Streak
+  else if(["1","2","3"].includes(yearCode) && tail==="looptail" && dropout==="3mm" && seatTube==="laidback"){
+    model="Silver Streak";
+    frameMaterial="Trimoly";
     characteristics="3mm rear dropout";
   }
 
-  // 🚫 DO NOT assign model if outside window
-  else{
-    // IMPORTANT: do nothing here
-    // Let it fall through to other models or Unknown
+  // ✅ Pro Medium
+  else if(["1","2","3"].includes(yearCode) && tail==="looptail" && dropout==="2mm" && seatTube==="laidback"){
+    model="Pro Medium";
   }
-}
 
-  // ✅ TK (STRICT DATE WINDOW)
-else if(
-  model === "Unknown Kanji Model" &&   // 🔥 ADD THIS LINE
-  yearCode === "0" &&
-  tail === "non-looptail" &&
-  dropout === "3mm"
-){
-
-  const monthIndex = {
-    A:1,B:2,C:3,D:4,E:5,F:6,G:7,H:8,X:9,J:10,K:11,L:12
-  };
-
-  let y = Number(year);
-  let m = monthIndex[monthCode];
-
-  let inWindow = (y === 1980 && m >= 2 && m <= 10);
-
-  if(inWindow){
-    model = "TK";
-    productionWindow = "February 1980 – October 1980";
-    characteristics = "Non-looptail, 3mm rear dropout, large gusset";
+  // ✅ Pro Senior 1st Gen
+  else if(["1","2"].includes(yearCode) && tail==="looptail" && bb==="us" && dropout==="2mm" && seatTube==="nearvertical"){
+    model="Pro Senior";
+    generation="1st Generation";
+    productionWindow="April 1981 – March 1982";
   }
+
+  // ✅ Pro Senior 2nd Gen
+  else if(["2","3"].includes(yearCode) && tail==="looptail" && bb==="us" && dropout==="2mm" && seatTube==="nearvertical"){
+    model="Pro Senior";
+    generation="2nd Generation";
+    productionWindow="April 1982 – March 1983";
+    characteristics="Rear leverage change";
+  }
+
+  // ✅ Harry Leary Turbo 1st Gen
+  else if(yearCode==="2" && tail==="looptail" && bb==="us" && dropout==="2mm" && seatTube==="nearvertical"){
+    model="Harry Leary Turbo";
+    generation="1st Generation";
+    productionWindow="April 1982 – May 1982";
+  }
+
+  // ✅ Harry Leary Turbo 2nd Gen
+  else if(["2","3"].includes(yearCode) && tail==="looptail" && bb==="us" && dropout==="2mm" && seatTube==="nearvertical"){
+    model="Harry Leary Turbo";
+    generation="2nd Generation";
+    productionWindow="April 1982 – September 1983";
+  }
+
+  // ✅ Harry Leary Turbo 3rd Gen
+  else if(yearCode==="4" && tail==="looptail"){
+    model="Harry Leary Turbo";
+    generation="3rd Generation";
+    productionWindow="April 1984 – September 1984";
+  }
+
+  // ✅ Turbo Lite
+  else if(yearCode==="3" && tail==="non-looptail" && bb==="euro"){
+    model="Turbo Lite";
+    characteristics="No diamond gusset";
+  }
+
+  // ✅ Formula One
+  else if(["3","4"].includes(yearCode) && tail==="non-looptail" && bb==="us"){
+    model="Formula One";
+  }
+
+  // Fallback note
+  if(model==="Unknown Kanji Model"){
+    notes="Selection does not match known model criteria. Check dropdown inputs.";
+  }
+
+  /* -----------------
+    OUTPUT
+  -----------------*/
+  result.innerHTML =
+  `<div class="result-title">Serial Number Details</div>
+   <table class="result-table">
+   <tr><td>Manufacturer:</td><td>${manufacturer}</td></tr>
+   <tr><td>Year:</td><td>${year}</td></tr>
+   <tr><td>Month:</td><td>${month}</td></tr>
+   <tr><td>Build Number:</td><td>${build}</td></tr>
+   <tr><td>Model:</td><td>${model}</td></tr>
+   <tr><td>Generation:</td><td>${generation}</td></tr>
+   <tr><td>Production Window:</td><td>${productionWindow}</td></tr>
+   <tr><td>Frame Material:</td><td>${frameMaterial}</td></tr>
+   <tr><td>Bottom Bracket:</td><td>${bb}</td></tr>
+   <tr><td>Characteristics:</td><td>${characteristics}</td></tr>
+   <tr><td>Notes:</td><td>${notes}</td></tr>
+   </table>`;
+
+  return;
 }
-
-// ✅ Pro Mini
-else if(yearCode==="1" && tail==="looptail" && bb==="euro" && dropout==="2mm" && seatTube==="laidback"){
-  model="Pro Mini";
-}
-
-// ✅ Silver Streak
-else if(["1","2","3"].includes(yearCode) && tail==="looptail" && dropout==="3mm" && seatTube==="laidback"){
-  model="Silver Streak";
-  frameMaterial="Trimoly";
-  characteristics="3mm rear dropout";
-}
-
-// ✅ Pro Medium
-else if(["1","2","3"].includes(yearCode) && tail==="looptail" && dropout==="2mm" && seatTube==="laidback"){
-  model="Pro Medium";
-}
-
-// ✅ Pro Senior 1st Gen
-else if(["1","2"].includes(yearCode) && tail==="looptail" && bb==="us" && dropout==="2mm" && seatTube==="nearvertical"){
-  model="Pro Senior";
-  generation="1st Generation";
-  productionWindow="April 1981 – March 1982";
-}
-
-// ✅ Pro Senior 2nd Gen
-else if(["2","3"].includes(yearCode) && tail==="looptail" && bb==="us" && dropout==="2mm" && seatTube==="nearvertical"){
-  model="Pro Senior";
-  generation="2nd Generation";
-  productionWindow="April 1982 – March 1983";
-  characteristics="Rear leverage change";
-}
-
-// ✅ Harry Leary Turbo 1st Gen
-else if(yearCode==="2" && tail==="looptail" && bb==="us" && dropout==="2mm" && seatTube==="nearvertical"){
-  model="Harry Leary Turbo";
-  generation="1st Generation";
-  productionWindow="April 1982 – May 1982";
-}
-
-// ✅ Harry Leary Turbo 2nd Gen
-else if(["2","3"].includes(yearCode) && tail==="looptail" && bb==="us" && dropout==="2mm" && seatTube==="nearvertical"){
-  model="Harry Leary Turbo";
-  generation="2nd Generation";
-  productionWindow="April 1982 – September 1983";
-}
-
-// ✅ Harry Leary Turbo 3rd Gen
-else if(yearCode==="4" && tail==="looptail"){
-  model="Harry Leary Turbo";
-  generation="3rd Generation";
-  productionWindow="April 1984 – September 1984";
-}
-
-// ✅ Turbo Lite
-else if(yearCode==="3" && tail==="nonlooptail" && bb==="euro"){
-  model="Turbo Lite";
-  characteristics="No diamond gusset";
-}
-
-// ✅ Formula One
-else if(["3","4"].includes(yearCode) && tail==="nonlooptail" && bb==="us"){
-  model="Formula One";
-}
-
-
-
-/* Fallback note */
-if(model==="Unknown Kanji Model"){
-  notes="Selection does not match known model criteria. Check dropdown inputs.";
-}
-
-/* -----------------
-OUTPUT
------------------*/
-result.innerHTML =
-`<div class="result-title">Serial Number Details</div>
-<table class="result-table">
-<tr><td>Manufacturer:</td><td>${manufacturer}</td></tr>
-<tr><td>Year:</td><td>${year}</td></tr>
-<tr><td>Month:</td><td>${month}</td></tr>
-<tr><td>Build Number:</td><td>${build}</td></tr>
-<tr><td>Model:</td><td>${model}</td></tr>
-<tr><td>Generation:</td><td>${generation}</td></tr>
-<tr><td>Production Window:</td><td>${productionWindow}</td></tr>
-<tr><td>Frame Material:</td><td>${frameMaterial}</td></tr>
-<tr><td>Bottom Bracket:</td><td>${bb}</td></tr>
-<tr><td>Characteristics:</td><td>${characteristics}</td></tr>
-<tr><td>Notes:</td><td>${notes}</td></tr>
-</table>`;
-return;
-}
+</script>
 
 /* -----------------
 FAIRLY FORMAT

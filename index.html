@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Frame Number Decoder v3.6</title>
+    <title>Frame Number Decoder v3.7</title>
     <style>
         /* UI STYLING SECTION */
         body { font-family: 'Segoe UI', Roboto, sans-serif; background: #f8f9fa; display: flex; justify-content: center; padding: 40px; margin: 0; }
@@ -27,17 +27,18 @@
         /* SELECTOR STYLING */
         .model-selector { margin-top: 15px; padding: 15px; background: #f8f9fa; border-radius: 8px; border: 1px dashed #dee2e6; }
         .model-selector label { display: block; font-size: 11px; font-weight: 800; margin-bottom: 10px; color: #495057; letter-spacing: 0.5px; }
-        select { width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #ced4da; background: white; font-size: 13px; color: #212529; }
+        select { width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #ced4da; background: white; font-size: 13px; color: #212529; margin-bottom: 10px; }
         
         .error { color: #dc3545; text-align: center; font-weight: 500; padding: 15px; background: #fff5f5; border-radius: 8px; border: 1px solid #ff000021; }
         .warning-text { color: #dc3545; font-size: 12px; margin-top: 10px; font-weight: 600; text-align: center; display: none; line-height: 1.4; }
+        .sub-selection { display: none; margin-top: 10px; border-top: 1px solid #e9ecef; padding-top: 10px; }
     </style>
 </head>
 <body>
 
 <div class="decoder-card">
     <h2>Frame Number Decoder</h2>
-    <div class="version-tag">Version 3.6</div>
+    <div class="version-tag">Version 3.7</div>
     
     <div class="input-group">
         <input type="text" id="serialInput" placeholder="Enter Frame Number..." spellcheck="false">
@@ -107,8 +108,18 @@ function runDecoder() {
                         <option value="tk">3mm Dropouts, Sticktail, US BB, Large Gusset (TK)</option>
                         <option value="mini">2mm Dropouts, Looptail, Euro BB, Large Gusset (Pro Mini)</option>
                         <option value="medium">2mm Dropouts, Looptail, US BB, Large Gusset, Laidback Post (Pro Medium)</option>
+                        <option value="senior">2mm Dropouts, Looptail, US BB, Large Gusset, Vertical Post (Pro Senior)</option>
                         <option value="unknown">Other features / Not listed</option>
                     </select>
+                    
+                    <div id="seniorSubSelection" class="sub-selection">
+                        <label>UPDATED DROPOUT LEVERAGE?</label>
+                        <select id="leverageSelect" onchange="updateSeniorGen()">
+                            <option value="no">No (Standard Leverage)</option>
+                            <option value="yes">Yes (Updated Leverage)</option>
+                        </select>
+                    </div>
+
                     <div id="warningBox" class="warning-text"></div>
                 </div>`;
         }
@@ -141,6 +152,7 @@ function renderTable(year, month, build, model, gen, man, label) {
  */
 function processKanjiSelection(serial) {
     const selection = document.getElementById('featureSelect').value;
+    const seniorSub = document.getElementById('seniorSubSelection');
     const modelCell = document.querySelector('.row-model td:last-child');
     const genCell = document.querySelector('.row-gen td:last-child');
     const genRow = document.querySelector('.row-gen');
@@ -149,6 +161,7 @@ function processKanjiSelection(serial) {
     
     warning.style.display = "none";
     warning.innerText = "";
+    seniorSub.style.display = "none";
 
     if (selection === "pro") {
         if (yearCode !== '0' && yearCode !== '1') {
@@ -186,7 +199,7 @@ function processKanjiSelection(serial) {
         }
     } else if (selection === "medium") {
         if (yearCode !== '1' && yearCode !== '2' && yearCode !== '3') {
-            warning.innerText = "⚠️ Feature mismatch: Pro Medium serial dates were only between 1981 and 1983 (Starts with 1, 2, or 3).";
+            warning.innerText = "⚠️ Feature mismatch: Pro Medium serial dates were only between 1981 and 1983.";
             warning.style.display = "block";
             modelCell.innerText = "TBC";
             genRow.style.display = "table-row";
@@ -195,11 +208,30 @@ function processKanjiSelection(serial) {
             modelCell.innerText = "Pro Medium";
             genRow.style.display = "none";
         }
+    } else if (selection === "senior") {
+        if (yearCode !== '1' && yearCode !== '2' && yearCode !== '3') {
+            warning.innerText = "⚠️ Feature mismatch: Pro Senior serial dates were only between 1981 and 1983.";
+            warning.style.display = "block";
+            modelCell.innerText = "TBC";
+            genRow.style.display = "table-row";
+            genCell.innerText = "TBC";
+        } else {
+            modelCell.innerText = "Pro Senior";
+            seniorSub.style.display = "block";
+            updateSeniorGen();
+            genRow.style.display = "table-row";
+        }
     } else {
         modelCell.innerText = "TBC";
         genCell.innerText = "TBC";
         genRow.style.display = "table-row";
     }
+}
+
+function updateSeniorGen() {
+    const leverage = document.getElementById('leverageSelect').value;
+    const genCell = document.querySelector('.row-gen td:last-child');
+    genCell.innerText = (leverage === "yes") ? "2nd" : "1st";
 }
 </script>
 </body>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Frame Number Decoder v4.1</title>
+    <title>Frame Number Decoder v4.2</title>
     <style>
         /* UI STYLING SECTION */
         body { font-family: 'Segoe UI', Roboto, sans-serif; background: #f8f9fa; display: flex; justify-content: center; padding: 40px; margin: 0; }
@@ -38,7 +38,7 @@
 
 <div class="decoder-card">
     <h2>Frame Number Decoder</h2>
-    <div class="version-tag">Version 4.1</div>
+    <div class="version-tag">Version 4.2</div>
     
     <div class="input-group">
         <input type="text" id="serialInput" placeholder="Enter Frame Number..." spellcheck="false">
@@ -110,7 +110,8 @@ function runDecoder() {
                         <option value="medium">2mm Dropouts, Looptail, US BB, Large Gusset, Laidback Post (Pro Medium)</option>
                         <option value="senior">2mm Dropouts, Looptail, US BB, Large Gusset, Vertical Post (Pro Senior)</option>
                         <option value="streak">3mm Dropouts, Looptail, US BB, Large Gusset, Laidback Post (Silver Streak)</option>
-                        <option value="turbo">2mm Dropouts, Looptail, US BB, Large Gusset, Vertical Post, Turbo Smoke (Harry Leary Turbo)</option>
+                        <option value="turbo">2mm Dropouts, Looptail, US BB, Large Gusset, Vertical Post, Turbo Smoke (HL Turbo 1st/2nd Gen)</option>
+                        <option value="turbo3">2mm Dropouts, Looptail, US BB, Small Diamond Gusset (HL Turbo 3rd Gen)</option>
                         <option value="f1">2mm Dropouts, Sticktail, US BB, Small Diamond Gusset (Formula 1)</option>
                         <option value="turbolite">2mm Dropouts, Sticktail, Euro BB, No Gusset (Turbo-Lite)</option>
                         <option value="unknown">Other features / Not listed</option>
@@ -226,6 +227,18 @@ function processKanjiSelection(serial) {
             updateSeniorGen(serial);
             genRow.style.display = "table-row";
         }
+    } else if (selection === "turbo3") {
+        if (yearCode !== '4') {
+            warning.innerText = "⚠️ Feature mismatch: 3rd Gen Harry Leary Turbo was only produced in 1984.";
+            warning.style.display = "block";
+            modelCell.innerText = "TBC";
+            genRow.style.display = "table-row";
+            genCell.innerText = "TBC";
+        } else {
+            modelCell.innerText = "Harry Leary Turbo";
+            genCell.innerText = "3rd";
+            genRow.style.display = "table-row";
+        }
     } else if (selection === "streak") {
         if (yearCode !== '1' && yearCode !== '2' && yearCode !== '3') {
             warning.innerText = "⚠️ Feature mismatch: Silver Streak serial dates were only between 1981 and 1983.";
@@ -271,7 +284,10 @@ function processKanjiSelection(serial) {
 
 function updateSeniorGen(serial) {
     const leverage = document.getElementById('leverageSelect').value;
-    const modelName = document.getElementById('featureSelect').options[document.getElementById('featureSelect').selectedIndex].text.split('(')[1].replace(')', '');
+    const selectEl = document.getElementById('featureSelect');
+    const modelText = selectEl.options[selectEl.selectedIndex].text;
+    const modelName = modelText.includes('HL Turbo') ? "Harry Leary Turbo" : "Pro Senior";
+    
     const genCell = document.querySelector('.row-gen td:last-child');
     const warning = document.getElementById('warningBox');
     const yearCode = serial.charAt(0);

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Frame Number Decoder v4.2</title>
+    <title>Frame Number Decoder v5.0</title>
     <style>
         /* UI STYLING SECTION */
         body { font-family: 'Segoe UI', Roboto, sans-serif; background: #f8f9fa; display: flex; justify-content: center; padding: 40px; margin: 0; }
@@ -27,7 +27,7 @@
         /* SELECTOR STYLING */
         .model-selector { margin-top: 15px; padding: 15px; background: #f8f9fa; border-radius: 8px; border: 1px dashed #dee2e6; }
         .model-selector label { display: block; font-size: 11px; font-weight: 800; margin-bottom: 10px; color: #495057; letter-spacing: 0.5px; }
-        select { width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #ced4da; background: white; font-size: 13px; color: #212529; margin-bottom: 10px; }
+        select { width: 100%; height: auto; padding: 10px; border-radius: 6px; border: 1px solid #ced4da; background: white; font-size: 13px; color: #212529; margin-bottom: 10px; white-space: normal; }
         
         .error { color: #dc3545; text-align: center; font-weight: 500; padding: 15px; background: #fff5f5; border-radius: 8px; border: 1px solid #ff000021; }
         .warning-text { color: #dc3545; font-size: 12px; margin-top: 10px; font-weight: 600; text-align: center; display: none; line-height: 1.4; }
@@ -38,7 +38,7 @@
 
 <div class="decoder-card">
     <h2>Frame Number Decoder</h2>
-    <div class="version-tag">Version 4.2</div>
+    <div class="version-tag">Version 5.0</div>
     
     <div class="input-group">
         <input type="text" id="serialInput" placeholder="Enter Frame Number..." spellcheck="false">
@@ -72,7 +72,6 @@ function runDecoder() {
         let years = { G: "1977", H: "1978", I: "1979" };
         let year = years[yearCode];
         let gen = (year === "1977") ? "1st" : "2nd";
-
         result.innerHTML = renderTable(year, months[monthCode], `#${build}`, "MX", gen, "Fabrications by Jere", "Sequential build number");
         return; 
     }
@@ -116,7 +115,6 @@ function runDecoder() {
                         <option value="turbolite">2mm Dropouts, Sticktail, Euro BB, No Gusset (Turbo-Lite)</option>
                         <option value="unknown">Other features / Not listed</option>
                     </select>
-                    
                     <div id="seniorSubSelection" class="sub-selection">
                         <label>UPDATED DROPOUT LEVERAGE?</label>
                         <select id="leverageSelect" onchange="updateSeniorGen('${serial}')">
@@ -124,10 +122,22 @@ function runDecoder() {
                             <option value="yes">Yes (Updated Leverage)</option>
                         </select>
                     </div>
-
                     <div id="warningBox" class="warning-text"></div>
                 </div>`;
         }
+        return;
+    }
+
+    // --- DECODER 4: FAIRLY BIKE MANUFACTURING CO ---
+    if(/^F[0-5C]\d{2}\d{4}$/.test(serial)){
+        let yearRaw = serial.charAt(1);
+        let monthCode = serial.substring(2,4);
+        let build = serial.substring(4);
+        if(yearRaw === "C") { yearRaw = "0"; }
+        let years = { 0:"1980", 1:"1981", 2:"1982", 3:"1983", 4:"1984", 5:"1985" };
+        let monthNames = { "01":"January", "02":"February", "03":"March", "04":"April", "05":"May", "06":"June", "07":"July", "08":"August", "09":"September", "10":"October", "11":"November", "12":"December" };
+
+        result.innerHTML = renderTable(years[yearRaw], monthNames[monthCode], `#${build}`, "TBC", "1st", "Fairly Bike Co", "Production Number");
         return;
     }
 
@@ -140,7 +150,6 @@ function runDecoder() {
 function renderTable(year, month, build, model, gen, man, label) {
     const noGenModels = ["TK", "Pro Mini", "Pro Medium"];
     const genStyle = (noGenModels.includes(model)) ? 'style="display:none;"' : '';
-    
     return `
         <table class="result-table">
             <tr><td>Year:</td><td>${year}</td></tr>
@@ -153,7 +162,7 @@ function renderTable(year, month, build, model, gen, man, label) {
 }
 
 /**
- * HELPER: INTERACTIVE UPDATE
+ * HELPER: KANJI INTERACTIVE UPDATE
  */
 function processKanjiSelection(serial) {
     const selection = document.getElementById('featureSelect').value;
@@ -163,123 +172,38 @@ function processKanjiSelection(serial) {
     const genRow = document.querySelector('.row-gen');
     const warning = document.getElementById('warningBox');
     const yearCode = serial.charAt(0);
-    
     warning.style.display = "none";
-    warning.innerText = "";
     seniorSub.style.display = "none";
 
     if (selection === "pro") {
-        if (yearCode !== '0' && yearCode !== '1') {
-            warning.innerText = "⚠️ Feature mismatch: Pro (aka Large Pro) was only produced in Kanji format from 1979 to 1981.";
-            warning.style.display = "block";
-            modelCell.innerText = "TBC";
-            genRow.style.display = "table-row";
-            genCell.innerText = "TBC";
-        } else {
-            modelCell.innerText = "Pro (aka Large Pro)";
-            genCell.innerText = "2nd";
-            genRow.style.display = "table-row";
-        }
+        if (yearCode !== '0' && yearCode !== '1') { warning.style.display = "block"; warning.innerText = "⚠️ Mismatch: Pro 1979-1981 only."; modelCell.innerText = "TBC"; } 
+        else { modelCell.innerText = "Pro (aka Large Pro)"; genCell.innerText = "2nd"; genRow.style.display = "table-row"; }
     } else if (selection === "tk") {
-        if (yearCode !== '0') {
-            warning.innerText = "⚠️ Feature mismatch: TK model was only produced in 1980 (Serial starts with 0).";
-            warning.style.display = "block";
-            modelCell.innerText = "TBC";
-            genRow.style.display = "table-row";
-            genCell.innerText = "TBC";
-        } else {
-            modelCell.innerText = "TK";
-            genRow.style.display = "none";
-        }
+        if (yearCode !== '0') { warning.style.display = "block"; warning.innerText = "⚠️ Mismatch: TK 1980 only."; modelCell.innerText = "TBC"; }
+        else { modelCell.innerText = "TK"; genRow.style.display = "none"; }
     } else if (selection === "mini") {
-        if (yearCode !== '1') {
-            warning.innerText = "⚠️ Feature mismatch: Pro Mini only produced in 1981 (Serial starts with 1).";
-            warning.style.display = "block";
-            modelCell.innerText = "TBC";
-            genRow.style.display = "table-row";
-            genCell.innerText = "TBC";
-        } else {
-            modelCell.innerText = "Pro Mini";
-            genRow.style.display = "none";
-        }
+        if (yearCode !== '1') { warning.style.display = "block"; warning.innerText = "⚠️ Mismatch: Mini 1981 only."; modelCell.innerText = "TBC"; }
+        else { modelCell.innerText = "Pro Mini"; genRow.style.display = "none"; }
     } else if (selection === "medium") {
-        if (yearCode !== '1' && yearCode !== '2' && yearCode !== '3') {
-            warning.innerText = "⚠️ Feature mismatch: Pro Medium serial dates were only between 1981 and 1983.";
-            warning.style.display = "block";
-            modelCell.innerText = "TBC";
-            genRow.style.display = "table-row";
-            genCell.innerText = "TBC";
-        } else {
-            modelCell.innerText = "Pro Medium";
-            genRow.style.display = "none";
-        }
+        if (yearCode !== '1' && yearCode !== '2' && yearCode !== '3') { warning.style.display = "block"; warning.innerText = "⚠️ Mismatch: Medium 1981-1983 only."; modelCell.innerText = "TBC"; }
+        else { modelCell.innerText = "Pro Medium"; genRow.style.display = "none"; }
     } else if (selection === "senior" || selection === "turbo") {
         const modelName = (selection === "senior") ? "Pro Senior" : "Harry Leary Turbo";
-        if (yearCode !== '1' && yearCode !== '2' && yearCode !== '3') {
-            warning.innerText = `⚠️ Feature mismatch: ${modelName} serial dates were only between 1981 and 1983.`;
-            warning.style.display = "block";
-            modelCell.innerText = "TBC";
-            genRow.style.display = "table-row";
-            genCell.innerText = "TBC";
-        } else {
-            modelCell.innerText = modelName;
-            seniorSub.style.display = "block";
-            updateSeniorGen(serial);
-            genRow.style.display = "table-row";
-        }
+        if (yearCode !== '1' && yearCode !== '2' && yearCode !== '3') { warning.style.display = "block"; warning.innerText = `⚠️ Mismatch: ${modelName} 1981-1983 only.`; modelCell.innerText = "TBC"; }
+        else { modelCell.innerText = modelName; seniorSub.style.display = "block"; updateSeniorGen(serial); genRow.style.display = "table-row"; }
     } else if (selection === "turbo3") {
-        if (yearCode !== '4') {
-            warning.innerText = "⚠️ Feature mismatch: 3rd Gen Harry Leary Turbo was only produced in 1984.";
-            warning.style.display = "block";
-            modelCell.innerText = "TBC";
-            genRow.style.display = "table-row";
-            genCell.innerText = "TBC";
-        } else {
-            modelCell.innerText = "Harry Leary Turbo";
-            genCell.innerText = "3rd";
-            genRow.style.display = "table-row";
-        }
+        if (yearCode !== '4') { warning.style.display = "block"; warning.innerText = "⚠️ Mismatch: Turbo 3rd Gen 1984 only."; modelCell.innerText = "TBC"; }
+        else { modelCell.innerText = "Harry Leary Turbo"; genCell.innerText = "3rd"; genRow.style.display = "table-row"; }
     } else if (selection === "streak") {
-        if (yearCode !== '1' && yearCode !== '2' && yearCode !== '3') {
-            warning.innerText = "⚠️ Feature mismatch: Silver Streak serial dates were only between 1981 and 1983.";
-            warning.style.display = "block";
-            modelCell.innerText = "TBC";
-            genRow.style.display = "table-row";
-            genCell.innerText = "TBC";
-        } else {
-            modelCell.innerText = "Silver Streak";
-            genCell.innerText = "1st";
-            genRow.style.display = "table-row";
-        }
+        if (yearCode !== '1' && yearCode !== '2' && yearCode !== '3') { warning.style.display = "block"; warning.innerText = "⚠️ Mismatch: Silver Streak 1981-1983 only."; modelCell.innerText = "TBC"; }
+        else { modelCell.innerText = "Silver Streak"; genCell.innerText = "1st"; genRow.style.display = "table-row"; }
     } else if (selection === "f1") {
-        if (yearCode !== '3' && yearCode !== '4') {
-            warning.innerText = "⚠️ Feature mismatch: Formula 1 serial dates were only between 1983 and 1984.";
-            warning.style.display = "block";
-            modelCell.innerText = "TBC";
-            genRow.style.display = "table-row";
-            genCell.innerText = "TBC";
-        } else {
-            modelCell.innerText = "Formula 1";
-            genCell.innerText = "1st";
-            genRow.style.display = "table-row";
-        }
+        if (yearCode !== '3' && yearCode !== '4') { warning.style.display = "block"; warning.innerText = "⚠️ Mismatch: Formula 1 1983-1984 only."; modelCell.innerText = "TBC"; }
+        else { modelCell.innerText = "Formula 1"; genCell.innerText = "1st"; genRow.style.display = "table-row"; }
     } else if (selection === "turbolite") {
-        if (yearCode !== '3' && yearCode !== '4') {
-            warning.innerText = "⚠️ Feature mismatch: Turbo-Lite serial dates were only between 1983 and 1984.";
-            warning.style.display = "block";
-            modelCell.innerText = "TBC";
-            genRow.style.display = "table-row";
-            genCell.innerText = "TBC";
-        } else {
-            modelCell.innerText = "Turbo-Lite";
-            genCell.innerText = "1st";
-            genRow.style.display = "table-row";
-        }
-    } else {
-        modelCell.innerText = "TBC";
-        genCell.innerText = "TBC";
-        genRow.style.display = "table-row";
-    }
+        if (yearCode !== '3' && yearCode !== '4') { warning.style.display = "block"; warning.innerText = "⚠️ Mismatch: Turbo-Lite 1983-1984 only."; modelCell.innerText = "TBC"; }
+        else { modelCell.innerText = "Turbo-Lite"; genCell.innerText = "1st"; genRow.style.display = "table-row"; }
+    } else { modelCell.innerText = "TBC"; genCell.innerText = "TBC"; genRow.style.display = "table-row"; }
 }
 
 function updateSeniorGen(serial) {
@@ -287,30 +211,17 @@ function updateSeniorGen(serial) {
     const selectEl = document.getElementById('featureSelect');
     const modelText = selectEl.options[selectEl.selectedIndex].text;
     const modelName = modelText.includes('HL Turbo') ? "Harry Leary Turbo" : "Pro Senior";
-    
     const genCell = document.querySelector('.row-gen td:last-child');
     const warning = document.getElementById('warningBox');
     const yearCode = serial.charAt(0);
-    
     warning.style.display = "none";
-    warning.innerText = "";
 
     if (leverage === "no") {
-        if (yearCode !== '1' && yearCode !== '2') {
-            warning.innerText = `⚠️ Feature mismatch: 1st Gen ${modelName} was only produced in 1981 and 1982.`;
-            warning.style.display = "block";
-            genCell.innerText = "TBC";
-        } else {
-            genCell.innerText = "1st";
-        }
+        if (yearCode !== '1' && yearCode !== '2') { warning.style.display = "block"; warning.innerText = `⚠️ Mismatch: 1st Gen ${modelName} 1981-1982 only.`; genCell.innerText = "TBC"; }
+        else { genCell.innerText = "1st"; }
     } else {
-        if (yearCode !== '2' && yearCode !== '3') {
-            warning.innerText = `⚠️ Feature mismatch: 2nd Gen ${modelName} was only produced in 1982 and 1983.`;
-            warning.style.display = "block";
-            genCell.innerText = "TBC";
-        } else {
-            genCell.innerText = "2nd";
-        }
+        if (yearCode !== '2' && yearCode !== '3') { warning.style.display = "block"; warning.innerText = `⚠️ Mismatch: 2nd Gen ${modelName} 1982-1983 only.`; genCell.innerText = "TBC"; }
+        else { genCell.innerText = "2nd"; }
     }
 }
 </script>

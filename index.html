@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Frame Number Decoder v4.0</title>
+    <title>Frame Number Decoder v4.1</title>
     <style>
         /* UI STYLING SECTION */
         body { font-family: 'Segoe UI', Roboto, sans-serif; background: #f8f9fa; display: flex; justify-content: center; padding: 40px; margin: 0; }
@@ -38,7 +38,7 @@
 
 <div class="decoder-card">
     <h2>Frame Number Decoder</h2>
-    <div class="version-tag">Version 4.0</div>
+    <div class="version-tag">Version 4.1</div>
     
     <div class="input-group">
         <input type="text" id="serialInput" placeholder="Enter Frame Number..." spellcheck="false">
@@ -112,6 +112,7 @@ function runDecoder() {
                         <option value="streak">3mm Dropouts, Looptail, US BB, Large Gusset, Laidback Post (Silver Streak)</option>
                         <option value="turbo">2mm Dropouts, Looptail, US BB, Large Gusset, Vertical Post, Turbo Smoke (Harry Leary Turbo)</option>
                         <option value="f1">2mm Dropouts, Sticktail, US BB, Small Diamond Gusset (Formula 1)</option>
+                        <option value="turbolite">2mm Dropouts, Sticktail, Euro BB, No Gusset (Turbo-Lite)</option>
                         <option value="unknown">Other features / Not listed</option>
                     </select>
                     
@@ -246,6 +247,18 @@ function processKanjiSelection(serial) {
             genCell.innerText = "TBC";
         } else {
             modelCell.innerText = "Formula 1";
+            genCell.innerText = "1st";
+            genRow.style.display = "table-row";
+        }
+    } else if (selection === "turbolite") {
+        if (yearCode !== '3' && yearCode !== '4') {
+            warning.innerText = "⚠️ Feature mismatch: Turbo-Lite serial dates were only between 1983 and 1984.";
+            warning.style.display = "block";
+            modelCell.innerText = "TBC";
+            genRow.style.display = "table-row";
+            genCell.innerText = "TBC";
+        } else {
+            modelCell.innerText = "Turbo-Lite";
             genCell.innerText = "1st";
             genRow.style.display = "table-row";
         }

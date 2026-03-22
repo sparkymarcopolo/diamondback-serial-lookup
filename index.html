@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Frame Number Decoder v3.5</title>
+    <title>Frame Number Decoder v3.6</title>
     <style>
         /* UI STYLING SECTION */
         body { font-family: 'Segoe UI', Roboto, sans-serif; background: #f8f9fa; display: flex; justify-content: center; padding: 40px; margin: 0; }
@@ -37,7 +37,7 @@
 
 <div class="decoder-card">
     <h2>Frame Number Decoder</h2>
-    <div class="version-tag">Version 3.5</div>
+    <div class="version-tag">Version 3.6</div>
     
     <div class="input-group">
         <input type="text" id="serialInput" placeholder="Enter Frame Number..." spellcheck="false">
@@ -106,6 +106,7 @@ function runDecoder() {
                         <option value="pro">3mm Dropouts, Looptail, US BB, Large Gusset (Pro)</option>
                         <option value="tk">3mm Dropouts, Sticktail, US BB, Large Gusset (TK)</option>
                         <option value="mini">2mm Dropouts, Looptail, Euro BB, Large Gusset (Pro Mini)</option>
+                        <option value="medium">2mm Dropouts, Looptail, US BB, Large Gusset, Laidback Post (Pro Medium)</option>
                         <option value="unknown">Other features / Not listed</option>
                     </select>
                     <div id="warningBox" class="warning-text"></div>
@@ -121,7 +122,7 @@ function runDecoder() {
  * HELPER: TABLE GENERATOR
  */
 function renderTable(year, month, build, model, gen, man, label) {
-    const noGenModels = ["TK", "Pro Mini"];
+    const noGenModels = ["TK", "Pro Mini", "Pro Medium"];
     const genStyle = (noGenModels.includes(model)) ? 'style="display:none;"' : '';
     
     return `
@@ -181,6 +182,17 @@ function processKanjiSelection(serial) {
             genCell.innerText = "TBC";
         } else {
             modelCell.innerText = "Pro Mini";
+            genRow.style.display = "none";
+        }
+    } else if (selection === "medium") {
+        if (yearCode !== '1' && yearCode !== '2' && yearCode !== '3') {
+            warning.innerText = "⚠️ Feature mismatch: Pro Medium serial dates were only between 1981 and 1983 (Starts with 1, 2, or 3).";
+            warning.style.display = "block";
+            modelCell.innerText = "TBC";
+            genRow.style.display = "table-row";
+            genCell.innerText = "TBC";
+        } else {
+            modelCell.innerText = "Pro Medium";
             genRow.style.display = "none";
         }
     } else {
